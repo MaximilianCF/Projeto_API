@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15
+    container_name: pulso_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: pulso
+      POSTGRES_PASSWORD: pulso123
+      POSTGRES_DB: pulsodb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  api:
+    build: .
+    container_name: pulso_api
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+
+volumes:
+  pgdata:
