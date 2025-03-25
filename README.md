@@ -16,13 +16,46 @@ O Pulso do Mercado é uma API + plataforma inteligente para democratizar o acess
 
 ---
 
-## 💡 Funcionalidades
+## 📦 Funcionalidades previstas
 
 - Consulta de dados econômicos via linguagem natural (GPT-4)
-- Fontes oficiais: Bacen, Ipea, IBGE, Tesouro Nacional
-- Geração automática de gráficos (IPCA, SELIC, PIB etc.)
+- Retorno estruturado de indicadores (IPCA, SELIC, PIB etc.)
+- Análises automáticas baseadas em IA
 - Exportação futura para Notion, Sheets, Telegram e Capacities
 - Foco total em dados brasileiros
+
+---
+
+## 🧱 Estrutura do Projeto
+
+```
+app/
+ ├── routes/            # Endpoints da API
+ ├── services/          # Integrações e lógica de negócio
+ └── main.py            # Inicialização do FastAPI
+
+docs/                   # Documentação estratégica e templates
+```
+
+---
+
+## 📘 Documentação Estratégica
+
+Veja a pasta [`/docs`](docs/) para:
+
+- Templates de cards (técnicos e administrativos)
+- Registro de decisões estratégicas
+- Diretrizes para contribuição
+
+---
+
+## 🛠️ Stack Atual
+
+- **Frontend:** React + Tailwind CSS (ou Carrd para landing)
+- **Backend:** Python (FastAPI) + GPT-4 API
+- **Banco de Dados:** PostgreSQL + TimescaleDB
+- **Infraestrutura:** Railway (prototipagem), Vercel (frontend)
+- **Observabilidade:** Grafana + Prometheus (planejado)
 
 ---
 
@@ -36,16 +69,6 @@ O Pulso do Mercado é uma API + plataforma inteligente para democratizar o acess
 | Backend/API                 | 🔄 Em desenvolvimento |
 | Integrações (Notion, etc.)  | 🔜 Próximas fases |
 | Recrutamento de colaboradores | 🟢 Ativo |
-
----
-
-## 🧩 Stack Atual
-
-- **Frontend:** React + Tailwind CSS (ou Carrd para landing)
-- **Backend:** Python (FastAPI) + GPT-4 API
-- **Banco de Dados:** PostgreSQL + TimescaleDB
-- **Infraestrutura:** Railway (prototipagem), Vercel (frontend)
-- **Observabilidade:** Grafana + Prometheus (planejado)
 
 ---
 
