@@ -1,0 +1,9 @@
+type: object
+properties:
+  name:
+    type: string
+  url:
+    type: string
+    format: uri
+  access_type:
+    type: string

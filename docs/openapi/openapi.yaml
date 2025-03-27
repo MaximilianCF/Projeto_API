@@ -1,0 +1,109 @@
+openapi: 3.0.0
+info:
+  title: Pulso do Mercado API
+  description: API para acesso consolidado a indicadores econômicos e financeiros do Brasil e do mundo.
+  version: "1.0.0"
+servers:
+  - url: https://api.pulsodomercado.com.br
+
+paths:
+  /meta/{indicador}:
+    get:
+      summary: Retorna metadados sobre um indicador
+      parameters:
+        - in: path
+          name: indicador
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Metadados do indicador
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Metadata'
+        '404':
+          description: Indicador não encontrado
+
+  /ipca:
+    get:
+      summary: Retorna valores de IPCA entre duas datas
+      parameters:
+        - in: query
+          name: start
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: end
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: type
+          required: false
+          schema:
+            type: string
+            default: mensal
+            enum: [mensal, acumulado, anual]
+      responses:
+        '200':
+          description: Valores do IPCA
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IPCAResponse'
+
+components:
+  schemas:
+    Metadata:
+      type: object
+      properties:
+        nome:
+          type: string
+        codigo_sgs:
+          type: integer
+        frequencia:
+          type: string
+        unidade:
+          type: string
+        fonte:
+          type: string
+        ultima_atualizacao:
+          type: string
+        descricao:
+          type: string
+
+    Periodo:
+      type: object
+      properties:
+        inicio:
+          type: string
+        fim:
+          type: string
+
+    RegistroMensal:
+      type: object
+      properties:
+        data:
+          type: string
+        valor:
+          type: number
+
+    IPCAResponse:
+      type: object
+      properties:
+        indicador:
+          type: string
+        periodo:
+          $ref: '#/components/schemas/Periodo'
+        tipo:
+          type: string
+        valor:
+          oneOf:
+            - type: array
+              items:
+                $ref: '#/components/schemas/RegistroMensal'
+            - type: number
+            - type: object

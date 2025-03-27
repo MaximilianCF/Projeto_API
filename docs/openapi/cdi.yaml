@@ -1,0 +1,29 @@
+openapi: 3.0.3
+info:
+  title: Pulso do Mercado API
+  version: "1.0"
+paths:
+  /api/cdi:
+    get:
+      summary: Último valor do CDI efetivo diário
+      description: Retorna o valor mais recente da taxa CDI efetiva, obtida do Banco Central do Brasil.
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CDI'
+components:
+  schemas:
+    CDI:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+          example: "2024-03-26"
+        value:
+          type: number
+          format: float
+          example: 10.65

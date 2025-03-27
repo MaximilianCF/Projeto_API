@@ -1,0 +1,2 @@
+openapi:
+	yq eval-all '  reduce . as $$item ({};     .openapi = $$item.openapi // .openapi |     .info = $$item.info // .info |     .paths += $$item.paths // {} |     .components.schemas += $$item.components.schemas // {}   )' docs/openapi/*.yaml > docs/openapi/openapi.yaml

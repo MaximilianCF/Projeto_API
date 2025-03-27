@@ -1,0 +1,29 @@
+openapi: 3.0.3
+info:
+  title: Pulso do Mercado API
+  version: "1.0"
+paths:
+  /api/ibovespa:
+    get:
+      summary: Último valor de fechamento do Ibovespa
+      description: Retorna o valor de fechamento mais recente do índice Ibovespa, via Yahoo Finance.
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ibovespa'
+components:
+  schemas:
+    Ibovespa:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+          example: "2024-03-26"
+        close:
+          type: number
+          format: float
+          example: 128560.24

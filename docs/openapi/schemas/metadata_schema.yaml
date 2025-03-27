@@ -1,0 +1,13 @@
+type: object
+properties:
+  indicator_id:
+    type: string
+  last_updated:
+    type: string
+    format: date-time
+  periodicity:
+    type: string
+  tags:
+    type: array
+    items:
+      type: string

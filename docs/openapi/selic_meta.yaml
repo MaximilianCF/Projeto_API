@@ -1,0 +1,29 @@
+openapi: 3.0.3
+info:
+  title: Pulso do Mercado API
+  version: "1.0"
+paths:
+  /api/selic-meta:
+    get:
+      summary: Último valor da Selic Meta
+      description: Retorna a taxa Selic Meta mais recente divulgada pelo Banco Central do Brasil.
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SelicMeta'
+components:
+  schemas:
+    SelicMeta:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+          example: "2024-03-26"
+        value:
+          type: number
+          format: float
+          example: 10.75

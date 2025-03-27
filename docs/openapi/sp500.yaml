@@ -1,0 +1,23 @@
+openapi: 3.0.3
+info:
+  title: Pulso do Mercado API
+  version: "1.0"
+paths:
+  /api/sp500:
+    get:
+      summary: Último valor de fechamento do S&P 500
+      description: Retorna o valor mais recente do índice S&P 500, via Yahoo Finance.
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SP500'
+components:
+  schemas:
+    SP500:
+      type: object
+      properties:
+        date:
+          type:

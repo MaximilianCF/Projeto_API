@@ -1,0 +1,29 @@
+openapi: 3.0.3
+info:
+  title: Pulso do Mercado API
+  version: "1.0"
+paths:
+  /api/treasury-10y:
+    get:
+      summary: Último rendimento do Treasury americano de 10 anos
+      description: Retorna o rendimento anualizado mais recente dos títulos do Tesouro dos EUA com vencimento em 10 anos, via FRED.
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Treasury10Y'
+components:
+  schemas:
+    Treasury10Y:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+          example: "2024-03-26"
+        yield_pct:
+          type: number
+          format: float
+          example: 4.25

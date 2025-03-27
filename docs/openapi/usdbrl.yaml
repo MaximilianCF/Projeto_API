@@ -1,0 +1,32 @@
+openapi: 3.0.3
+info:
+  title: Pulso do Mercado API
+  version: "1.0"
+paths:
+  /api/usdbrl:
+    get:
+      summary: Último valor do câmbio USD/BRL
+      description: Retorna a cotação de fechamento mais recente do dólar americano em relação ao real (USD/BRL).
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaxaCambio'
+components:
+  schemas:
+    TaxaCambio:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+          example: "2024-03-26"
+        currency:
+          type: string
+          example: "USD/BRL"
+        value:
+          type: number
+          format: float
+          example: 5.04
