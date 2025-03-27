@@ -2,11 +2,11 @@ import pytest
 from httpx import AsyncClient, ASGITransport
 from main import app
 import respx
+import httpx  # <-- Essa linha estava faltando!
 
 @pytest.mark.asyncio
 @respx.mock
 async def test_get_treasury():
-    # Mock para a URL externa da API do FRED
     mock_response = {
         "observations": [
             {"date": "2024-03-27", "value": "4.75"}
