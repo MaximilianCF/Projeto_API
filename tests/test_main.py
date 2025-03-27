@@ -9,4 +9,4 @@ async def test_selic_endpoint():
 
     assert response.status_code in [200, 404]
     # Dependendo do seu retorno atual, ajuste abaixo:
-    #assert isinstance(response.json(), dict)  # Teste básico: retorna um dicionário JSON
+    assert isinstance(response.json(), dict)  # Teste básico: retorna um dicionário JSON
