@@ -13,15 +13,16 @@ async def get_selic_csv(
     data_final: str = Query(default=None)
 ):
     try:
-        # Monta a URL com os parâmetros
         url = f"https://api.bcb.gov.br/dados/serie/bcdata.sgs.11/dados?formato=csv&dataInicial={data_inicial}"
         if data_final:
             url += f"&dataFinal={data_final}"
 
-        response = requests.get(url)
+        # Header importante para a API do BCB aceitar
+        headers = {"Accept": "text/csv"}
+
+        response = requests.get(url, headers=headers)
         response.raise_for_status()
 
-        # Leitura e tratamento do CSV
         df = pd.read_csv(StringIO(response.text), sep=';', encoding='latin1')
         df['data'] = pd.to_datetime(df['data'], dayfirst=True)
         df['valor'] = df['valor'].str.replace(',', '.').astype(float)
