@@ -13,3 +13,4 @@ pytest-asyncio
 respx
 coverage
 pytest-mock
+sentry-sdk

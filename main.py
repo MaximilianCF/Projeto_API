@@ -1,5 +1,13 @@
 # main.py
 
+import sentry_sdk
+
+sentry_sdk.init(
+    dsn="https://a34502bf8869b33a2a794d71a97af2c6@o4509056723976192.ingest.de.sentry.io/4509056728432720",
+    traces_sample_rate=1.0
+)
+
+
 from fastapi import FastAPI
 from dotenv import load_dotenv
 import os
