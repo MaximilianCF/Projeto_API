@@ -37,3 +37,8 @@ jobs:
     - name: Cobertura mínima exigida (exemplo 80%)
       run: |
         coverage report --fail-under=80
+    - name: Deploy no Render
+      if: success()
+      run: |
+        curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
+                
