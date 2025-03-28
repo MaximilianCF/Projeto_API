@@ -1,5 +1,3 @@
-# routes/selic_csv.py
-
 from fastapi import APIRouter, HTTPException, Query
 import pandas as pd
 import requests
@@ -17,8 +15,10 @@ async def get_selic_csv(
         if data_final:
             url += f"&dataFinal={data_final}"
 
-        # Header importante para a API do BCB aceitar
-        headers = {"Accept": "text/csv"}
+        headers = {
+            "Accept": "text/csv",
+            "User-Agent": "Mozilla/5.0"
+        }
 
         response = requests.get(url, headers=headers)
         response.raise_for_status()
