@@ -7,7 +7,7 @@ from io import StringIO
 
 router = APIRouter()
 
-CSV_URL = "https://api.bcb.gov.br/dados/serie/bcdata.sgs.11/dados?formato=csv"
+CSV_URL = "https://api.bcb.gov.br/dados/serie/bcdata.sgs.11/dados?formato=csv&dataInicial=28/03/2015"
 
 @router.get("/selic-csv")
 async def get_selic_csv():
