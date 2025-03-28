@@ -1,6 +1,8 @@
+# routes/selic_csv.py
+
 from fastapi import APIRouter, HTTPException, Query
 import pandas as pd
-import requests
+import httpx
 from io import StringIO
 
 router = APIRouter()
@@ -16,11 +18,13 @@ async def get_selic_csv(
             url += f"&dataFinal={data_final}"
 
         headers = {
-            "Accept": "text/csv",
-            "User-Agent": "Mozilla/5.0"
+            "Accept": "text/csv,application/xhtml+xml",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
         }
 
-        response = requests.get(url, headers=headers)
+        async with httpx.AsyncClient() as client:
+            response = await client.get(url, headers=headers, timeout=15.0)
+
         response.raise_for_status()
 
         df = pd.read_csv(StringIO(response.text), sep=';', encoding='latin1')
