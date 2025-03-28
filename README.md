@@ -1,3 +1,6 @@
+![CI](https://github.com/MaximilianCF/Projeto_API/actions/workflows/ci.yml/badge.svg?branch=main)
+
+
 # Pulso do Mercado 🧠📊
 
 ![Status](https://img.shields.io/badge/status-em%20desenvolvimento-blue)
