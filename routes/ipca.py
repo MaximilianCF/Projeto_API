@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.services.ipca_service import get_ipca_data, generate_ipca_analysis
+from backup_app.services.ipca_service import get_ipca_data, generate_ipca_analysis
 
 router = APIRouter(prefix="/ipca")  # <- isso é o que faltava!
 

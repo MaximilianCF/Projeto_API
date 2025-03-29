@@ -6,3 +6,5 @@ from .cambio import router as cambio_router
 from .cdi import router as cdi_router
 from .sp500 import router as sp500_router
 from .treasury import router as treasury_router
+from .usdbrl import router as usdbrl_router
+from .ipca import router as ipca_router
