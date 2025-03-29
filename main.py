@@ -10,6 +10,8 @@ sentry_sdk.init(
 
 from fastapi import FastAPI
 from dotenv import load_dotenv
+from core.database import create_db_and_tables
+from routes import selic, ipca, usdbrl
 import os
 
 # Carrega variáveis do .env
@@ -25,6 +27,11 @@ from routes.selic_csv import router as selic_csv_router
 
 app = FastAPI(title="Pulso do Mercado API")
 
+@app.on_event("startup")
+def on_startup():
+    create_db_and_tables()
+
+#rotas
 app.include_router(selic_router, prefix="/api")
 app.include_router(ibov_router, prefix="/api")
 app.include_router(cambio_router, prefix="/api")
@@ -32,4 +39,6 @@ app.include_router(cdi_router, prefix="/api")
 app.include_router(sp500_router, prefix="/api")
 app.include_router(treasury_router, prefix="/api")
 app.include_router(selic_csv_router, prefix="/api")
-
+app.include_router(selic.router, prefix="/selic", tags=["SELIC"])
+app.include_router(ipca.router, prefix="/ipca", tags=["IPCA"])
+app.include_router(usdbrl.router, prefix="/usdbrl", tags=["USD/BRL"])
