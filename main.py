@@ -28,6 +28,8 @@ from routes.selic_csv import router as selic_csv_router
 from routes.ipca import router as ipca_router
 from routes.usdbrl import router as usdbrl_router 
 from routes import users_router
+from routes import challenges_router
+from routes import submissions_router
 
 app = FastAPI(title="Pulso do Mercado API")
 
@@ -46,3 +48,5 @@ app.include_router(selic_csv_router, prefix="/api", tags=["SELIC CSV"])
 app.include_router(ipca_router, prefix="/ipca", tags=["IPCA"])
 app.include_router(usdbrl_router, prefix="/usdbrl", tags=["USD/BRL"])
 app.include_router(users_router, prefix="/api", tags=["USERS"])
+app.include_router(challenges_router, prefix="/api/challenges", tags=["CHALLENGES"])
+app.include_router(submissions_router, prefix="/api/submissions", tags=["SUBMISSIONS"])
