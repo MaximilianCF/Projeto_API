@@ -70,3 +70,6 @@ sqlmodel
 openai
 python-jose[cryptography]
 python-jose[cryptography]
+passlib[bcrypt]
+sentry-sdk
+sentry-sdk

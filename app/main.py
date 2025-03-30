@@ -4,16 +4,33 @@ from fastapi import FastAPI, HTTPException, Depends
 from dotenv import load_dotenv
 from datetime import timedelta
 from pydantic import BaseModel
+from sqlmodel import Session, select
+from app.models.user import User
+from app.core.database import get_session
+from passlib.context import CryptContext
 
 # internos (app.)
 from app.core.database import create_db_and_tables
-from app.core.security.jwt_auth import create_access_token, verify_token
+from app.core.security.jwt_auth import get_current_user, create_access_token, verify_token
 
-# Carrega variáveis do .env
+# Ativação Sentry-SDK
+import os
+from dotenv import load_dotenv
+
+# Carrega variáveis antes de tudo
 load_dotenv()
 
+import sentry_sdk
+
+if os.getenv("ENV") == "production" and os.getenv("SENTRY_DSN"):
+    sentry_sdk.init(
+        dsn=os.getenv("SENTRY_DSN"),
+        traces_sample_rate=1.0,
+        environment="production"
+    )
+
 # Modelo simples para autenticação (para testes/demo)
-class User(BaseModel):
+class UserLogin(BaseModel):
     username: str
     password: str
 
@@ -37,21 +54,27 @@ app = FastAPI(title="Pulso do Mercado API")
 def on_startup():
     create_db_and_tables()
 
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
 # Rota atualizada para criar Token JWT
 @app.post('/api/token')
-async def login(user: User):
-    if user.username != "usuario_demo" or user.password != "senha_demo":
+async def login(user: UserLogin, session: Session = Depends(get_session)):
+    db_user = session.exec(select(User).where(User.username == user.username)).first()
+
+    if not db_user or not pwd_context.verify(user.password, db_user.hashed_password):
         raise HTTPException(status_code=401, detail="Usuário ou senha incorretos")
 
     access_token = create_access_token(
-        data={"sub": user.username}, expires_delta=timedelta(minutes=60)
+        data={"sub": db_user.username},
+        expires_delta=timedelta(minutes=60)
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
+
 # Rota protegida atualizada com JWT
 @app.get('/api/protected')
-async def protected(token_data=Depends(verify_token)):
-    return {"message": f"Bem-vindo(a), {token_data.username}!"}
+async def protected(current_user: User = Depends(get_current_user)):
+    return {"message": f"Bem-vindo(a), {current_user.username}!"}
 
 # Rotas principais
 app.include_router(selic_router, prefix="/api", tags=["SELIC"])
@@ -66,3 +89,7 @@ app.include_router(usdbrl_router, prefix="/usdbrl", tags=["USD/BRL"])
 app.include_router(users_router, prefix="/api", tags=["USERS"])
 app.include_router(challenges_router, prefix="/api/challenges", tags=["CHALLENGES"])
 app.include_router(submissions_router, prefix="/api/submissions", tags=["SUBMISSIONS"])
+
+@app.get("/")
+def read_root():
+    return {"message": "Pulso do Mercado API rodando com sucesso 🚀. Acesse /docs para a documentação."}

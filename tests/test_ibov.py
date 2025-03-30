@@ -1,7 +1,7 @@
 import pytest
 import respx
 from httpx import AsyncClient, ASGITransport, Response
-from main import app
+from app.main import app
 
 @pytest.mark.asyncio
 @respx.mock
