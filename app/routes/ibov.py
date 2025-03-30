@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from models.ibov import Ibovespa
+from app.models.ibov import Ibovespa
 from datetime import datetime
 import httpx
 

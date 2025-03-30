@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from models.sp500 import SP500
+from app.models.sp500 import SP500
 from datetime import datetime
 import httpx
 

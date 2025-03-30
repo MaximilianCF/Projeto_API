@@ -12,9 +12,9 @@ engine = create_engine(
 
 # 🔁 Função para criar as tabelas com base nos modelos
 def create_db_and_tables():
-    from models.user import User
-    from models.challenge import Challenge
-    from models.submission import Submission
+    from app.models.user import User
+    from app.models.challenge import Challenge
+    from app.models.submission import Submission
 
     SQLModel.metadata.create_all(engine)
 

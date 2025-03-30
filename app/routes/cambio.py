@@ -1,16 +1,16 @@
-# routes/selic.py
+# routes/cambio.py
 
 from fastapi import APIRouter, HTTPException
-from models.selic import SelicMeta
+from app.models.cambio import TaxaCambio
 from datetime import date
 import httpx
 
 router = APIRouter()
 
-BCB_URL = "https://api.bcb.gov.br/dados/serie/bcdata.sgs.432/dados/ultimos/1?formato=json"
+BCB_URL = "https://api.bcb.gov.br/dados/serie/bcdata.sgs.1/dados/ultimos/1?formato=json"
 
-@router.get("/selic-meta", response_model=SelicMeta)
-async def get_selic_meta():
+@router.get("/usdbrl", response_model=TaxaCambio)
+async def get_cambio_usd_brl():
     try:
         async with httpx.AsyncClient() as client:
             response = await client.get(BCB_URL)
@@ -19,8 +19,9 @@ async def get_selic_meta():
 
             return {
                 "date": date.fromisoformat(data["data"].split("/")[2] + "-" + data["data"].split("/")[1] + "-" + data["data"].split("/")[0]),
+                "currency": "USD/BRL",
                 "value": float(data["valor"].replace(",", "."))
             }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Erro ao buscar SELIC: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Erro ao buscar taxa de câmbio: {str(e)}")

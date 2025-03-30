@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from typing import List
 from sqlmodel import Session, select
-from core.database import get_session
-from models.challenge import Challenge, ChallengeCreate, ChallengeRead
+from app.core.database import get_session
+from app.models.challenge import Challenge, ChallengeCreate, ChallengeRead
 
 router = APIRouter()
 

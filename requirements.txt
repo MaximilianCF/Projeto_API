@@ -61,3 +61,12 @@ uvloop==0.21.0
 watchfiles==1.0.4
 wcwidth==0.2.13
 websockets==15.0.1
+fastapi-jwt-auth
+python-jose[cryptography]
+passlib[bcrypt]
+python-jose[cryptography]
+passlib[bcrypt]
+sqlmodel
+openai
+python-jose[cryptography]
+python-jose[cryptography]

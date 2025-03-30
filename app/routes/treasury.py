@@ -1,7 +1,7 @@
 # routes/treasury.py
 
 from fastapi import APIRouter, HTTPException
-from models.treasury import Treasury10Y
+from app.models.treasury import Treasury10Y
 from datetime import datetime
 import httpx
 import os

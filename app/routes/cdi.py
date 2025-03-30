@@ -1,7 +1,7 @@
 # routes/cdi.py
 
 from fastapi import APIRouter, HTTPException
-from models.cdi import CDI
+from app.models.cdi import CDI
 from datetime import date
 import httpx
 
