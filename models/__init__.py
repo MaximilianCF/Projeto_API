@@ -6,3 +6,6 @@ from .cambio import TaxaCambio
 from .cdi import CDI
 from .sp500 import SP500
 from .treasury import Treasury10Y
+from .user import User
+from .challenge import Challenge
+from .submission import Submission
