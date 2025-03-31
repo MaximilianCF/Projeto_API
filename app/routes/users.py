@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends
 from sqlmodel import Session, select
 from app.core.database import get_session
-from app.models.user import User, UserCreate, UserRead
+from app.models.user import User, UserCreate, UserRead, UserUpdate
 from passlib.context import CryptContext
 
 router = APIRouter()
