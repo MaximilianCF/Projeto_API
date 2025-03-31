@@ -19,3 +19,24 @@ class UserRead(UserBase):
 class User(UserBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     created_at: datetime = Field(default_factory=datetime.utcnow)
+from typing import Optional
+from sqlmodel import SQLModel, Field
+from datetime import datetime
+
+class UserBase(SQLModel):
+    username: str
+    email: str
+    score: int = 0
+    level: str = "Bronze"
+
+class UserCreate(UserBase):
+    password: str
+
+class UserRead(UserBase):
+    id: int
+    created_at: datetime
+
+class User(UserBase, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    hashed_password: str
+    created_at: datetime = Field(default_factory=datetime.utcnow)

@@ -52,6 +52,9 @@ from app.routes.infomoney import router as infomoney_router
 
 app = FastAPI(title="Pulso do Mercado API")
 
+from app.middleware.logging import LoggingMiddleware
+app.add_middleware(LogginMiddleware)
+
 @app.on_event("startup")
 def on_startup():
     create_db_and_tables()
@@ -100,6 +103,18 @@ app.include_router(challenges_router, prefix="/api/challenges", tags=["CHALLENGE
 app.include_router(submissions_router, prefix="/api/submissions", tags=["SUBMISSIONS"])
 app.include_router(infomoney_router, prefix="/api", tags=["WEBSCRAPING"])
 
+
 @app.get("/")
 def read_root():
     return {"message": "Pulso do Mercado API rodando com sucesso 🚀. Acesse /docs para a documentação."}
+
+import os
+from app.scripts.seed_users import seed_demo_user
+
+@app.on_event("startup")
+def on_startup():
+    create_db_and_tables()
+
+    if os.getenv("ENV") == "development" and os.getenv("SEED_DEMO_USER", "False") == "True":
+        seed_demo_user()
+
