@@ -3,9 +3,10 @@ __pycache__/
 *.py[cod]
 *.env
 .env
-venv/
 .env.*
+venv/
 *.sqlite3
+*.log
 
 # VSCode
 .vscode/
@@ -13,3 +14,20 @@ venv/
 # OS
 .DS_Store
 Thumbs.db
+
+# Pytest / Coverage
+htmlcov/
+.tox/
+.nox/
+.coverage
+coverage.xml
+.cache/
+.pytest_cache/
+
+# Jupyter Notebooks (se vier a usar)
+.ipynb_checkpoints/
+
+# Backup/Scripts antigos fora do app
+scripts/
+*.bak
+*.old.py
