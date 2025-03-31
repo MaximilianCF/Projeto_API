@@ -76,6 +76,13 @@ async def login(user: UserLogin, session: Session = Depends(get_session)):
 async def protected(current_user: User = Depends(get_current_user)):
     return {"message": f"Bem-vindo(a), {current_user.username}!"}
 
+
+# Rota temporária para testar envio de erros ao Sentry
+#@app.get("/api/test-sentry")
+#async def test_sentry():
+#    raise ValueError("Erro forçado para testar o Sentry 🚨")
+
+
 # Rotas principais
 app.include_router(selic_router, prefix="/api", tags=["SELIC"])
 app.include_router(ibov_router, prefix="/api", tags=["IBOVESPA"])
