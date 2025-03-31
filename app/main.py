@@ -12,7 +12,7 @@ from passlib.context import CryptContext
 # internos (app.)
 from app.core.database import create_db_and_tables
 from app.core.security.jwt_auth import get_current_user, create_access_token, verify_token
-f
+
 
 # Ativação Sentry-SDK
 import os
