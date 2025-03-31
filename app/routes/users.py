@@ -48,3 +48,25 @@ def read_current_user(current_user: User = Depends(get_current_user)):
         "level": current_user.level,
         "created_at": current_user.created_at,
     }
+
+@router.put("/users/update")
+async def update_user(
+    updated_user: UserUpdate,
+    current_user: User = Depends(get_current_user),
+    session: Session = Depends(get_session)
+):
+    current_user.email = updated_user.email
+    current_user.level = updated_user.level
+    session.add(current_user)
+    session.commit()
+    session.refresh(current_user)
+    return {"message": "Dados atualizados com sucesso", "user": current_user}
+
+@router.delete("/users/delete")
+async def delete_user(
+    current_user: User = Depends(get_current_user),
+    session: Session = Depends(get_session)
+):
+    session.delete(current_user)
+    session.commit()
+    return {"message": f"Usuário '{current_user.username}' deletado com sucesso"}
