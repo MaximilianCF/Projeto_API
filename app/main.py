@@ -48,7 +48,7 @@ from app.routes.usdbrl import router as usdbrl_router
 from app.routes import users_router
 from app.routes import challenges_router
 from app.routes import submissions_router
-rom app.routes.infomoney import router as infomoney_router
+from app.routes.infomoney import router as infomoney_router
 
 app = FastAPI(title="Pulso do Mercado API")
 
