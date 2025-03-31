@@ -53,7 +53,7 @@ from app.routes.infomoney import router as infomoney_router
 app = FastAPI(title="Pulso do Mercado API")
 
 from app.middleware.logging import LoggingMiddleware
-app.add_middleware(LogginMiddleware)
+app.add_middleware(LoggingMiddleware)
 
 @app.on_event("startup")
 def on_startup():
