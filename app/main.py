@@ -12,6 +12,7 @@ from passlib.context import CryptContext
 # internos (app.)
 from app.core.database import create_db_and_tables
 from app.core.security.jwt_auth import get_current_user, create_access_token, verify_token
+f
 
 # Ativação Sentry-SDK
 import os
@@ -47,6 +48,7 @@ from app.routes.usdbrl import router as usdbrl_router
 from app.routes import users_router
 from app.routes import challenges_router
 from app.routes import submissions_router
+rom app.routes.infomoney import router as infomoney_router
 
 app = FastAPI(title="Pulso do Mercado API")
 
@@ -96,6 +98,7 @@ app.include_router(usdbrl_router, prefix="/usdbrl", tags=["USD/BRL"])
 app.include_router(users_router, prefix="/api", tags=["USERS"])
 app.include_router(challenges_router, prefix="/api/challenges", tags=["CHALLENGES"])
 app.include_router(submissions_router, prefix="/api/submissions", tags=["SUBMISSIONS"])
+app.include_router(infomoney_router, prefix="/api", tags=["WEBSCRAPING"])
 
 @app.get("/")
 def read_root():
