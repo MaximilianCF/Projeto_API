@@ -1,24 +1,14 @@
-from sqlmodel import SQLModel, create_engine, Session
+# app/core/database.py
+
+from sqlmodel import create_engine, SQLModel, Session
 import os
 
-# 🔐 Caminho do banco (usando SQLite local por padrão)
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./pulso.db")
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./db.sqlite")
+engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 
-# ⚙️ Engine de conexão
-engine = create_engine(
-    DATABASE_URL,
-    echo=True  # loga as queries no terminal (pode remover depois)
-)
-
-# 🔁 Função para criar as tabelas com base nos modelos
 def create_db_and_tables():
-    from app.models.user import User
-    from app.models.challenge import Challenge
-    from app.models.submission import Submission
-
     SQLModel.metadata.create_all(engine)
 
-# 🧪 Session para uso em endpoints
 def get_session():
     with Session(engine) as session:
         yield session

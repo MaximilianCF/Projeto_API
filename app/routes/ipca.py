@@ -1,13 +1,13 @@
+# app/routes/ipca.py
+
 from fastapi import APIRouter
-from app.backup_app.services.ipca_service import get_ipca_data, generate_ipca_analysis
 
-router = APIRouter(prefix="/ipca")  # <- isso é o que faltava!
+router = APIRouter()
 
-@router.get("/")
-async def read_ipca():
-    data = get_ipca_data()
-    analysis = generate_ipca_analysis(data)
+@router.get("/ipca")
+def get_ipca():
     return {
-        "dados": data,
-        "analise": analysis
+        "indicador": "IPCA",
+        "valor": 4.12,
+        "data": "2025-03-01"
     }

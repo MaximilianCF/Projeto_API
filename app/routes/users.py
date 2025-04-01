@@ -1,72 +1,66 @@
-from fastapi import APIRouter, HTTPException, Depends
+# app/routes/users.py
+
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel import Session, select
-from app.core.database import get_session
+
 from app.models.user import User, UserCreate, UserRead, UserUpdate
-from passlib.context import CryptContext
+from app.core.database import get_session
+from app.core.security.jwt_auth import pwd_context
 
 router = APIRouter()
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# 🔐 Criar novo usuário
+@router.post("/users", response_model=UserRead)
+def create_user(user_create: UserCreate, session: Session = Depends(get_session)):
+    existing = session.exec(select(User).where(User.username == user_create.username)).first()
+    if existing:
+        raise HTTPException(status_code=400, detail="Usuário já existe")
 
-@router.post("/users/register", response_model=UserRead)
-def register(user_create: UserCreate, session: Session = Depends(get_session)):
-    # Verifica se já existe usuário com o mesmo username ou email
-    existing_user = session.exec(
-        select(User).where((User.username == user_create.username) | (User.email == user_create.email))
-    ).first()
-    
-    if existing_user:
-        raise HTTPException(status_code=400, detail="Usuário ou e-mail já registrado.")
-
-    # Cria o hash da senha
-    hashed_password = pwd_context.hash(user_create.hashed_password)
-
-    user = User(
+    hashed_pw = pwd_context.hash(user_create.password)
+    new_user = User(
         username=user_create.username,
         email=user_create.email,
-        hashed_password=hashed_password
+        hashed_password=hashed_pw,
     )
+    session.add(new_user)
+    session.commit()
+    session.refresh(new_user)
+    return new_user
+
+# 📖 Ler usuário por ID
+@router.get("/users/{user_id}", response_model=UserRead)
+def read_user(user_id: int, session: Session = Depends(get_session)):
+    user = session.get(User, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuário não encontrado")
+    return user
+
+# 🛠️ Atualizar usuário
+@router.put("/users/{user_id}", response_model=UserRead)
+def update_user(user_id: int, user_update: UserUpdate, session: Session = Depends(get_session)):
+    user = session.get(User, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuário não encontrado")
+
+    if user_update.email is not None:
+        user.email = user_update.email
+    if user_update.score is not None:
+        user.score = user_update.score
+    if user_update.level is not None:
+        user.level = user_update.level
+    if user_update.password is not None:
+        user.hashed_password = pwd_context.hash(user_update.password)
 
     session.add(user)
     session.commit()
     session.refresh(user)
     return user
 
-from fastapi import APIRouter, Depends
-from app.core.security.jwt_auth import get_current_user
-from app.models.user import User
-
-router = APIRouter()
-
-@router.get("/users/me", response_model=dict)
-def read_current_user(current_user: User = Depends(get_current_user)):
-    return {
-        "id": current_user.id,
-        "username": current_user.username,
-        "email": current_user.email,
-        "score": current_user.score,
-        "level": current_user.level,
-        "created_at": current_user.created_at,
-    }
-
-@router.put("/users/update")
-async def update_user(
-    updated_user: UserUpdate,
-    current_user: User = Depends(get_current_user),
-    session: Session = Depends(get_session)
-):
-    current_user.email = updated_user.email
-    current_user.level = updated_user.level
-    session.add(current_user)
+# ❌ Deletar usuário
+@router.delete("/users/{user_id}", status_code=204)
+def delete_user(user_id: int, session: Session = Depends(get_session)):
+    user = session.get(User, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuário não encontrado")
+    session.delete(user)
     session.commit()
-    session.refresh(current_user)
-    return {"message": "Dados atualizados com sucesso", "user": current_user}
-
-@router.delete("/users/delete")
-async def delete_user(
-    current_user: User = Depends(get_current_user),
-    session: Session = Depends(get_session)
-):
-    session.delete(current_user)
-    session.commit()
-    return {"message": f"Usuário '{current_user.username}' deletado com sucesso"}

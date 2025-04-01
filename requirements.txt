@@ -74,3 +74,4 @@ passlib[bcrypt]
 sentry-sdk
 sentry-sdk
 beautifulsoup4
+bcrypt==4.1.2
