@@ -1,10 +1,12 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException, Request
+from app.middleware.rate_limit import limiter  # ⬅️ importa o limiter
 from datetime import date
 
 router = APIRouter()
 
-@router.get("/", summary="Cotação mockada do Dólar Comercial (USD/BRL)")
-def get_usdbrl():
+@router.get("/usdbrl", summary="Cotação mockada do Dólar Comercial (USD/BRL)")
+@limiter.limit("10/minute")
+def get_usdbrl(request: Request):
     return {
         "data": str(date.today()),
         "compra": 4.89,

@@ -18,11 +18,13 @@ services:
     build: .
     container_name: pulso_api
     ports:
-      - "8000:8000"
+      - "8000:8000"   # FastAPI rodando na porta 8000 interna e externa
     depends_on:
       - db
     volumes:
       - .:/app
+    env_file:
+      - .env          # Carrega variáveis como FRED_API_KEY, SECRET_KEY, etc.
 
 volumes:
   pgdata:

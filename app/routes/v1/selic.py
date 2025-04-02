@@ -1,6 +1,7 @@
 # routes/selic.py
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
+from app.middleware.rate_limit import limiter  # ⬅️ importa o limiter
 from app.models.selic import SelicMeta
 from datetime import date
 import httpx
@@ -9,8 +10,9 @@ router = APIRouter()
 
 BCB_URL = "https://api.bcb.gov.br/dados/serie/bcdata.sgs.432/dados/ultimos/1?formato=json"
 
-@router.get("/selic-meta", response_model=SelicMeta)
-async def get_selic_meta():
+@router.get("/selic", response_model=SelicMeta)
+@limiter.limit("10/minute")
+async def get_selic_meta(request: Request):  # ⬅️ Adiciona request aqui
     try:
         async with httpx.AsyncClient() as client:
             response = await client.get(BCB_URL)

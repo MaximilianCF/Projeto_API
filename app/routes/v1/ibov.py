@@ -1,32 +1,42 @@
-from fastapi import APIRouter, HTTPException
-from app.models.ibov import Ibovespa
+from fastapi import APIRouter, HTTPException, Request
+from app.middleware.rate_limit import limiter
 from datetime import datetime
+from cachetools import TTLCache
 import httpx
 
 router = APIRouter()
 
-YF_URL = "https://query1.finance.yahoo.com/v8/finance/chart/^BVSP?interval=1d&range=1d"
+# Cache com no máximo 1 item e 60 segundos de TTL
+ibov_cache = TTLCache(maxsize=1, ttl=60)
 
-@router.get("/ibovespa", response_model=Ibovespa)
-async def get_ibovespa():
+@router.get("/ibov")
+@limiter.limit("10/minute")
+async def get_ibov(request: Request):
+    if "ibov" in ibov_cache:
+        return ibov_cache["ibov"]
+
+    url = "https://query1.finance.yahoo.com/v8/finance/chart/^BVSP?interval=1d&range=1d"
+    headers = {"User-Agent": "Mozilla/5.0"}
+
     try:
         async with httpx.AsyncClient() as client:
-            response = await client.get(YF_URL)
+            response = await client.get(url, headers=headers)
             response.raise_for_status()
             data = response.json()
 
-            result = data["chart"]["result"]
-            if not result or "timestamp" not in result[0] or not result[0]["timestamp"]:
-                raise ValueError("Dados de IBOV inválidos ou ausentes")
+            value = data["chart"]["result"][0]["meta"]["regularMarketPrice"]
+            timestamp = data["chart"]["result"][0]["meta"]["regularMarketTime"]
+            dt = datetime.fromtimestamp(timestamp)
 
-            timestamp = result[0]["timestamp"][0]
-            close = result[0]["indicators"]["quote"][0]["close"][0]
-
-            return {
-                "date": datetime.fromtimestamp(timestamp).date(),
-                "close": close
+            result = {
+                "data": dt.strftime("%Y-%m-%d %H:%M:%S"),
+                "valor": value
             }
 
+            ibov_cache["ibov"] = result
+            return result
+
+    except httpx.HTTPStatusError as e:
+        raise HTTPException(status_code=e.response.status_code, detail=f"Erro ao buscar IBOV: {str(e)}")
     except Exception as e:
-        print(f"[IBOV ERROR] {e}")
-        raise HTTPException(status_code=500, detail=f"Erro ao buscar IBOV: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Erro interno ao processar dados do IBOV: {str(e)}")

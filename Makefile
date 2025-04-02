@@ -37,8 +37,26 @@ reset-db:
 	rm -f db.sqlite3 && touch db.sqlite3
 
 # 📄 Junta YAMLs da OpenAPI
+OPENAPI_PORT := $(shell python3 -c 'import socket; s=socket.socket(); s.bind(("",0)); print(s.getsockname()[1]); s.close()')
+
 openapi:
-	uvicorn app.main:app --port 9999 & \
-	sleep 3 && \
-	curl http://localhost:9999/openapi.json | yq -P > docs/openapi/openapi.yaml && \
-	lsof -ti:9999 | xargs kill
+	@echo "🔄 Gerando documentação OpenAPI na porta dinâmica $(OPENAPI_PORT)..."
+
+	@uvicorn app.main:app --port $(OPENAPI_PORT) & echo $$! > uvicorn.pid; \
+	sleep 3; \
+	until curl -s http://localhost:$(OPENAPI_PORT)/openapi.json > /dev/null; do \
+		echo "⏳ Esperando o Uvicorn responder em :$(OPENAPI_PORT)..."; \
+		sleep 1; \
+	done; \
+	curl -s http://localhost:$(OPENAPI_PORT)/openapi.json > docs/openapi/openapi.json; \
+	if command -v yq >/dev/null 2>&1; then \
+		yq -P docs/openapi/openapi.json > docs/openapi/openapi.yaml; \
+	else \
+		echo "⚠️  yq não instalado. Apenas JSON gerado."; \
+	fi; \
+	kill `cat uvicorn.pid`; \
+	rm uvicorn.pid; \
+	echo "✅ Documentação OpenAPI gerada com sucesso!"; \
+	echo "📁 Arquivos gerados: docs/openapi/openapi.json e docs/openapi/openapi.yaml"
+
+

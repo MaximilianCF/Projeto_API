@@ -1,17 +1,17 @@
 FROM python:3.11-slim
 
+# Define o diretório de trabalho dentro do container
 WORKDIR /app
 
-# Copia e instala dependências primeiro para melhor cache
+# Copia e instala as dependências primeiro para otimizar cache
 COPY requirements.txt .
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
-# Copia restante da aplicação
+# Copia o restante do código da aplicação
 COPY . .
 
-# Expõe a porta do FastAPI
+# Expõe a porta usada pela aplicação FastAPI/Uvicorn
 EXPOSE 8000
 
-# Executa FastAPI via Uvicorn em modo produção
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "10000"]
-
+# Comando para rodar a API com Uvicorn na porta 8000
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
