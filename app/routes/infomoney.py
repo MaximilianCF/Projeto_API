@@ -39,8 +39,8 @@ router = APIRouter()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
-@router.get("/webscraping/infomoney")
-async def get_infomoney_headlines():
+@router.get("/infomoney")
+async def scrape_infomoney():
     url = "https://www.infomoney.com.br/mercados/"
     try:
         async with httpx.AsyncClient() as client:

@@ -23,7 +23,7 @@ def test_protected_endpoint():
     seed_user()
     with TestClient(app) as client:
         # 1. Login
-        response = client.post("/api/token", json={
+        response = client.post("/api/token", data={
             "username": "usuario_demo",
             "password": "senha_demo"
         })

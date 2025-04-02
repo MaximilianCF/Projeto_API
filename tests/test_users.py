@@ -7,6 +7,7 @@ from sqlmodel import select
 from passlib.context import CryptContext
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+client = TestClient(app)
 
 def seed_user():
     session = next(get_session())
@@ -20,19 +21,22 @@ def seed_user():
         session.add(demo)
         session.commit()
 
-def test_users_me():
+def test_login_and_me():
     seed_user()
-    with TestClient(app) as client:
-        response = client.post("/api/token", json={
-            "username": "usuario_demo",
-            "password": "senha_demo"
-        })
-        assert response.status_code == 200
-        token = response.json()["access_token"]
 
-        headers = {"Authorization": f"Bearer {token}"}
-        me_response = client.get("/api/users/me", headers=headers)
+    # login via /token
+    response = client.post("/api/token", data={
+        "username": "usuario_demo",
+        "password": "senha_demo"
+    })
 
-        assert me_response.status_code == 200
-        data = me_response.json()
-        assert data["username"] == "usuario_demo"
+    assert response.status_code == 200, f"Erro no login: {response.text}"
+    token = response.json()["access_token"]
+
+    # acesso à rota autenticada /me
+    headers = {"Authorization": f"Bearer {token}"}
+    me_response = client.get("/api/me", headers=headers)
+
+    assert me_response.status_code == 200
+    data = me_response.json()
+    assert data["username"] == "usuario_demo"

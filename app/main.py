@@ -1,40 +1,59 @@
-
 # app/main.py
 
-from app.routes import users
 from fastapi import FastAPI
 from dotenv import load_dotenv
-import os
 
 from app.middleware.logging import LoggingMiddleware
 from app.security.openapi_schema import custom_openapi
-from app.routes import token, me
-from app.routes import selic, ipca, cdi, ibov, sp500, usdbrl, treasury
+
+# Routers
+from app.routes.selic import router as selic_router
+from app.routes.ipca import router as ipca_router
+from app.routes.cdi import router as cdi_router
+from app.routes.ibov import router as ibov_router
+from app.routes.sp500 import router as sp500_router
+from app.routes.usdbrl import router as usdbrl_router
+from app.routes.treasury import router as treasury_router
+from app.routes.users import router as users_router
+from app.routes.token import router as token_router
+from app.routes.me import router as me_router
+from app.routes.status import router as status_router
+from app.routes.protected import router as protected_router
+from app.routes.infomoney import router as infomoney_router
 
 load_dotenv()
 
 app = FastAPI(title="Pulso do Mercado API")
 
-# Middleware de logging
+# Middleware
 app.add_middleware(LoggingMiddleware)
 
-# Documentação Swagger customizada
+# Documentação customizada
 app.openapi = lambda: custom_openapi(app)
 
 @app.get("/")
 def read_root():
     return {"message": "Pulso do Mercado API rodando com sucesso 🚀. Acesse /docs para a documentação."}
 
-# Rotas públicas de indicadores
-app.include_router(selic.router, prefix="/api", tags=["SELIC"])
-app.include_router(ipca.router, prefix="/api", tags=["IPCA"])
-app.include_router(cdi.router, prefix="/api", tags=["CDI"])
-app.include_router(ibov.router, prefix="/api", tags=["IBOVESPA"])
-app.include_router(sp500.router, prefix="/api", tags=["S&P 500"])
-app.include_router(usdbrl.router, prefix="/api", tags=["USD/BRL"])
-app.include_router(treasury.router, prefix="/api", tags=["US Treasury"])
-app.include_router(users.router, prefix="/api", tags=["Usuários"])
+# Indicadores públicos
+app.include_router(selic_router, prefix="/api", tags=["SELIC"])
+app.include_router(ipca_router, prefix="/api", tags=["IPCA"])
+app.include_router(cdi_router, prefix="/api", tags=["CDI"])
+app.include_router(ibov_router, prefix="/api", tags=["IBOVESPA"])
+app.include_router(sp500_router, prefix="/api", tags=["S&P 500"])
+app.include_router(usdbrl_router, prefix="/api", tags=["USD/BRL"])
+app.include_router(treasury_router, prefix="/api", tags=["US Treasury"])
 
-# Autenticação e dados do usuário autenticado
-app.include_router(token.router, tags=["Autenticação"])
-app.include_router(me.router, prefix="/api", tags=["Usuário"])
+# Usuários e autenticação
+app.include_router(users_router, prefix="/api/users", tags=["Usuários"])
+app.include_router(token_router, prefix="/api/token", tags=["Autenticação"])
+app.include_router(me_router, prefix="/api", tags=["Usuário"])
+
+# Rota protegida (para testes de token)
+app.include_router(protected_router, prefix="/api", tags=["Protegido"])
+
+# Webscraping
+app.include_router(infomoney_router, prefix="/api/webscraping", tags=["Webscraping"])
+
+# Status da API
+app.include_router(status_router, prefix="/api", tags=["Status"])
