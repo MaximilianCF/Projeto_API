@@ -19,7 +19,7 @@ async def test_get_treasury():
 
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as ac:
-        response = await ac.get("/api/treasury-10y")
+        response = await ac.get("/api/v1/treasury-10y")
 
     assert response.status_code == 200
     assert response.json() == {

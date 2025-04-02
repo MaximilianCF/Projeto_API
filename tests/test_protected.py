@@ -21,18 +21,18 @@ def seed_user():
 
 def test_protected_endpoint():
     seed_user()
+
     with TestClient(app) as client:
-        # 1. Login
-        response = client.post("/api/token", data={
+        response = client.post("/api/v1/token", data={
             "username": "usuario_demo",
             "password": "senha_demo"
         })
         assert response.status_code == 200
         token = response.json()["access_token"]
 
-        # 2. Acessar rota protegida
         headers = {"Authorization": f"Bearer {token}"}
-        protected = client.get("/api/protected", headers=headers)
+        protected = client.get("/api/v1/protected", headers=headers)
 
         assert protected.status_code == 200
         assert "Bem-vindo" in protected.json()["message"]
+

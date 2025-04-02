@@ -24,19 +24,14 @@ def seed_user():
 def test_login_and_me():
     seed_user()
 
-    # login via /token
-    response = client.post("/api/token", data={
+    response = client.post("/api/v1/token", data={
         "username": "usuario_demo",
         "password": "senha_demo"
     })
-
-    assert response.status_code == 200, f"Erro no login: {response.text}"
+    assert response.status_code == 200
     token = response.json()["access_token"]
 
-    # acesso à rota autenticada /me
     headers = {"Authorization": f"Bearer {token}"}
-    me_response = client.get("/api/me", headers=headers)
-
+    me_response = client.get("/api/v1/me", headers=headers)
     assert me_response.status_code == 200
-    data = me_response.json()
-    assert data["username"] == "usuario_demo"
+    assert me_response.json()["username"] == "usuario_demo"

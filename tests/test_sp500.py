@@ -26,7 +26,7 @@ async def test_get_sp500_mock():
 
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as ac:
-        response = await ac.get("/api/sp500")
+        response = await ac.get("/api/v1/sp500")
 
     assert response.status_code == 200
     data = response.json()

@@ -38,4 +38,7 @@ reset-db:
 
 # 📄 Junta YAMLs da OpenAPI
 openapi:
-	yq eval-all 'reduce . as $$item ({}; .openapi = $$item.openapi // .openapi | .info = $$item.info // .info | .paths += $$item.paths // {} | .components.schemas += $$item.components.schemas // {} )' docs/openapi/*.yaml > docs/openapi/openapi.yaml
+	uvicorn app.main:app --port 9999 & \
+	sleep 3 && \
+	curl http://localhost:9999/openapi.json | yq -P > docs/openapi/openapi.yaml && \
+	lsof -ti:9999 | xargs kill

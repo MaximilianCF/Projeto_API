@@ -10,7 +10,7 @@ from app.core.security.jwt_auth import create_access_token, pwd_context
 
 router = APIRouter()
 
-@router.post("/api/token")
+@router.post("/")
 def login(form_data: OAuth2PasswordRequestForm = Depends(), session: Session = Depends(get_session)):
     user = session.exec(select(User).where(User.username == form_data.username)).first()
     

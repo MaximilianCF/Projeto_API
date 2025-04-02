@@ -4,6 +4,6 @@ from app.models.user import User
 
 router = APIRouter()
 
-@router.get("/api/protected")
+@router.get("/protected")
 def protected_route(current_user: User = Depends(get_current_user)):
     return {"message": f"Bem-vindo, {current_user.username}!"}

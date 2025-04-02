@@ -6,7 +6,7 @@ from app.main import app
 async def test_get_selic():
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as ac:
-        response = await ac.get("/api/selic-meta")
+        response = await ac.get("/api/v1/selic-meta")
     assert response.status_code == 200
     data = response.json()
     assert "date" in data

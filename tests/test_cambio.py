@@ -6,7 +6,7 @@ from app.main import app
 async def get_cambio_usd_brl():
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as ac:
-        response = await ac.get("/api/usdbrl")
+        response = await ac.get("/api/v1/usdbrl")
     assert response.status_code == 200
     data = response.json()
     assert "date" in data
