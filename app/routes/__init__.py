@@ -11,5 +11,5 @@ from app.routes.v1.sp500 import router as sp500_router
 from app.routes.v1.status import router as status_router
 from app.routes.v1.token import router as token_router
 from app.routes.v1.treasury import router as treasury_router
-from app.routes.v1.usdbrl import router as usdbrl_router
+from app.routes.v1.usd_brl import router as usd_brl_router
 from app.routes.v1.users import router as users_router

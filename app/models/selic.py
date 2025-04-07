@@ -1,8 +1,10 @@
-# models/selic.py
-
-from pydantic import BaseModel
 from datetime import date
+from typing import Optional
 
-class SelicMeta(BaseModel):
-    date: date
-    value: float  # valor da taxa Selic meta em %
+from sqlmodel import Field, SQLModel
+
+
+class Selic(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    data: date
+    valor: float

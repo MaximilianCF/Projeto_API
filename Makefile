@@ -22,7 +22,7 @@ lint:
 
 # 🛠️ Rebuild da imagem
 build:
-	docker-compose build
+	docker-compose up --build -d
 
 # 🚀 Sobe os containers
 up:
@@ -59,4 +59,16 @@ openapi:
 	echo "✅ Documentação OpenAPI gerada com sucesso!"; \
 	echo "📁 Arquivos gerados: docs/openapi/openapi.json e docs/openapi/openapi.yaml"
 
+# 🧪 Teste da rota de upload isolada
+test-upload:
+	docker-compose exec api pytest tests/test_upload.py
+
+test-desafios:
+	docker-compose exec api pytest tests/test_desafios.py
+
+test-submissoes:
+	docker-compose exec api pytest tests/test_submissoes.py
+
+test-leaderboard:
+	docker-compose exec api pytest tests/test_leaderboard.py
 

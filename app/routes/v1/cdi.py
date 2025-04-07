@@ -1,17 +1,22 @@
 # routes/cdi.py
 
-from fastapi import APIRouter, HTTPException, Request
-from app.models.cdi import CDI
 from datetime import date
+
 import httpx
-#from slowapi.decorator import Limiter
+from fastapi import APIRouter, HTTPException, Request
+
+# from slowapi.decorator import Limiter
 from app.middleware.rate_limit import limiter  # ⬅️ importa o limiter
+from app.models.cdi import Cdi
 
 router = APIRouter()
 
-BCB_URL = "https://api.bcb.gov.br/dados/serie/bcdata.sgs.12/dados/ultimos/1?formato=json"
+BCB_URL = (
+    "https://api.bcb.gov.br/dados/serie/bcdata.sgs.12/dados/ultimos/1?formato=json"
+)
 
-@router.get("/cdi", response_model=CDI)
+
+@router.get("/cdi", response_model=Cdi)
 @limiter.limit("10/minute")
 async def get_cdi(request: Request):  # ⬅️ Adiciona request aqui
     try:
@@ -24,8 +29,10 @@ async def get_cdi(request: Request):  # ⬅️ Adiciona request aqui
                 "date": date.fromisoformat(
                     f"{data['data'].split('/')[2]}-{data['data'].split('/')[1]}-{data['data'].split('/')[0]}"
                 ),
-                "value": float(data["valor"].replace(",", "."))
+                "value": float(data["valor"].replace(",", ".")),
             }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Erro ao buscar CDI: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Erro ao buscar CDI: {str(e)}")

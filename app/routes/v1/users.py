@@ -3,16 +3,21 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel import Session, select
 
-from app.models.user import User, UserCreate, UserRead, UserUpdate
 from app.core.database import get_session
 from app.core.security.jwt_auth import pwd_context
+from app.models.user import User, UserCreate, UserRead, UserUpdate
 
 router = APIRouter()
 
+
 # 🔐 Criar novo usuário
 @router.post("/users", response_model=UserRead)
-def create_user(user_create: UserCreate, session: Session = Depends(get_session)):
-    existing = session.exec(select(User).where(User.username == user_create.username)).first()
+async def create_user(
+        user_create: UserCreate,
+        session: Session = Depends(get_session)):
+    existing = session.exec(
+        select(User).where(User.username == user_create.username)
+    ).first()
     if existing:
         raise HTTPException(status_code=400, detail="Usuário já existe")
 
@@ -27,6 +32,7 @@ def create_user(user_create: UserCreate, session: Session = Depends(get_session)
     session.refresh(new_user)
     return new_user
 
+
 # 📖 Ler usuário por ID
 @router.get("/users/{user_id}", response_model=UserRead)
 def read_user(user_id: int, session: Session = Depends(get_session)):
@@ -35,9 +41,11 @@ def read_user(user_id: int, session: Session = Depends(get_session)):
         raise HTTPException(status_code=404, detail="Usuário não encontrado")
     return user
 
+
 # 🛠️ Atualizar usuário
 @router.put("/users/{user_id}", response_model=UserRead)
-def update_user(user_id: int, user_update: UserUpdate, session: Session = Depends(get_session)):
+def update_user(user_id: int, user_update: UserUpdate,
+                session: Session = Depends(get_session)):
     user = session.get(User, user_id)
     if not user:
         raise HTTPException(status_code=404, detail="Usuário não encontrado")
@@ -55,6 +63,7 @@ def update_user(user_id: int, user_update: UserUpdate, session: Session = Depend
     session.commit()
     session.refresh(user)
     return user
+
 
 # ❌ Deletar usuário
 @router.delete("/users/{user_id}", status_code=204)

@@ -1,14 +1,18 @@
-# app/core/database.py
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.orm import sessionmaker
+from app.core import settings
 
-from sqlmodel import create_engine, SQLModel, Session
-import os
+# Engine assíncrono (PostgreSQL com asyncpg)
+engine = create_async_engine("postgresql+asyncpg://pulso:pulso123@localhost:5432/pulsodb", echo=False, future=True)
 
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./db.sqlite")
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+# Fábrica de sessões assíncronas
+AsyncSessionLocal = sessionmaker(
+    bind=engine,
+    class_=AsyncSession,
+    expire_on_commit=False
+)
 
-def create_db_and_tables():
-    SQLModel.metadata.create_all(engine)
-
-def get_session():
-    with Session(engine) as session:
+# Dependência para FastAPI
+async def get_session() -> AsyncSession:
+    async with AsyncSessionLocal() as session:
         yield session

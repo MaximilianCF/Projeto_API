@@ -1,8 +1,10 @@
-import pytest
-from httpx import AsyncClient, ASGITransport
-from app.main import app
-import respx
 import httpx  # <-- Essa linha estava faltando!
+import pytest
+import respx
+from httpx import ASGITransport, AsyncClient
+
+from app.main import app
+
 
 @pytest.mark.asyncio
 @respx.mock
@@ -19,7 +21,7 @@ async def test_get_treasury():
 
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as ac:
-        response = await ac.get("/api/v1/treasury-10y")
+        response = await ac.get("/api/v1/treasury")
 
     assert response.status_code == 200
     assert response.json() == {

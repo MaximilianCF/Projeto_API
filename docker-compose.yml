@@ -14,17 +14,22 @@ services:
     ports:
       - "5432:5432"
 
-  api:
-    build: .
+  pulso_api:
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: pulso_api
     ports:
-      - "8000:8000"   # FastAPI rodando na porta 8000 interna e externa
+      - "8000:8000"
     depends_on:
       - db
     volumes:
       - .:/app
     env_file:
-      - .env          # Carrega variáveis como FRED_API_KEY, SECRET_KEY, etc.
+      - .env
+    command: >
+      sh -c "python -m app.core.init_db && uvicorn app.main:app --host 0.0.0.0 --port 8000"
+
 
 volumes:
   pgdata:

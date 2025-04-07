@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
+
 def fetch_infomoney_headlines():
     url = "https://www.infomoney.com.br/mercados/"
     headers = {"User-Agent": "PulsoBot/1.0"}
@@ -18,12 +19,15 @@ def fetch_infomoney_headlines():
         title = article.get_text(strip=True)
         link = article.get("href")
         if title and link:
-            headlines.append({
-                "titulo": title,
-                "url": link if link.startswith("http") else f"https://www.infomoney.com.br{link}"
-            })
+            headlines.append(
+                {
+                    "titulo": title,
+                    "url": (
+                        link
+                        if link.startswith("http")
+                        else f"https://www.infomoney.com.br{link}"
+                    ),
+                }
+            )
 
-    return {
-        "fonte": "InfoMoney",
-        "dados": headlines
-    }
+    return {"fonte": "InfoMoney", "dados": headlines}

@@ -1,9 +1,11 @@
 # app/middleware/logging.py
 
 import time
+
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from starlette.responses import Response
+
 
 class LoggingMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
@@ -14,5 +16,7 @@ class LoggingMiddleware(BaseHTTPMiddleware):
         path = request.url.path
         status = response.status_code
         user_agent = request.headers.get("user-agent", "unknown")
-        print(f"{method} {path} - Status: {status} - Tempo: {duration}ms - User-Agent: {user_agent}")
+        print(
+            f"{method} {path} - Status: {status} - Tempo: {duration}ms - User-Agent: {user_agent}"
+        )
         return response

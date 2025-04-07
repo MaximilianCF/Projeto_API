@@ -1,10 +1,11 @@
 import pytest
 from fastapi.testclient import TestClient
+from passlib.context import CryptContext
+from sqlmodel import select
+
+from app.core.database import get_session
 from app.main import app
 from app.models.user import User
-from app.core.database import get_session
-from sqlmodel import select
-from passlib.context import CryptContext
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 client = TestClient(app)

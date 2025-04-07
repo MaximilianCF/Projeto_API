@@ -1,0 +1,82 @@
+.
+├── app
+│   ├── core
+│   ├── __init__.py
+│   ├── main.py
+│   ├── middleware
+│   ├── models
+│   ├── __pycache__
+│   ├── routes
+│   ├── schemas
+│   ├── scripts
+│   ├── security
+│   └── services
+├── app.log
+├── CONTRIBUTING.md
+├── data
+│   └── ipca_exemplo.csv
+├── db.sqlite
+├── db.sqlite3
+├── docker-compose.yml
+├── Dockerfile
+├── docs
+│   ├── modelo_registro_decisao.md
+│   ├── openapi
+│   ├── openapi.yaml
+│   ├── README.md
+│   ├── recapitulacao_pulso_do_mercado.md
+│   ├── template_card_conceitual.md
+│   └── template_card_tecnico.md
+├── env
+│   ├── bin
+│   ├── include
+│   ├── lib
+│   ├── lib64 -> lib
+│   ├── pyvenv.cfg
+│   └── share
+├── estrutura.txt
+├── ipca_exemplo.csv
+├── LICENSE
+├── Makefile
+├── pytest.ini
+├── README (1).md
+├── README.md
+├── README_MVP_01_04_2025.md
+├── requirements-dev.txt
+├── requirements.txt
+├── routes
+├── run_tests.sh
+├── script_init_db.py
+├── setup_container_tools.sh
+├── setup-git.sh
+├── src
+│   └── App.js
+├── test_bcrypt.py
+├── tests
+│   ├── conftest.py
+│   ├── __init__.py
+│   ├── __pycache__
+│   ├── test_cdi.py
+│   ├── test_desafios.py
+│   ├── test_ibov.py
+│   ├── test_import.py
+│   ├── test_infomoney.py
+│   ├── test_leaderboard.py
+│   ├── test_main.py
+│   ├── test_protected.py
+│   ├── test_selic.py
+│   ├── test_sp500.py
+│   ├── test_status.py
+│   ├── test_submissoes.py
+│   ├── test_treasury.py
+│   ├── test_upload.py
+│   ├── test_usb_brl.py
+│   └── test_users.py
+├── tree.txt
+└── uploads
+    ├── test_2025-04-02T21:30:47.164968_sem_token.csv
+    ├── test_2025-04-02T21:32:22.987007_teste.csv
+    ├── tester_2025-04-02T21:37:50.468754_teste.csv
+    └── tester_2025-04-03T00:31:45.746528_teste.csv
+
+25 directories, 55 files

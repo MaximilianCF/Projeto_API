@@ -1,10 +1,12 @@
 # models/cambio.py
 
-from pydantic import BaseModel
 from datetime import date
 from typing import Literal
 
-class TaxaCambio(BaseModel):
+from pydantic import BaseModel
+
+
+class Usd_brl(BaseModel):
     date: date
     currency: Literal["USD/BRL"]
     value: float  # valor de fechamento

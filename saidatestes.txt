@@ -1,0 +1,1869 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.2, pytest-8.3.5, pluggy-1.5.0 -- /home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/maximiliancfcnpi/Programação/Projeto_API
+configfile: pytest.ini
+plugins: asyncio-0.26.0, anyio-4.9.0, mock-3.14.0, respx-0.22.0, cov-5.0.0
+asyncio: mode=Mode.STRICT, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 23 items
+
+tests/test_cdi.py::test_cdi FAILED                                       [  4%]
+tests/test_desafios.py::test_get_desafios_autenticado FAILED             [  8%]
+tests/test_desafios.py::test_get_desafios_nao_autenticado FAILED         [ 13%]
+tests/test_ibov.py::test_get_ibov_mock[asyncio] FAILED                   [ 17%]
+tests/test_ibov.py::test_get_ibov_mock[trio] FAILED                      [ 21%]
+tests/test_infomoney.py::test_infomoney_scraping FAILED                  [ 26%]
+tests/test_leaderboard.py::test_leaderboard_authenticated PASSED         [ 30%]
+tests/test_leaderboard.py::test_leaderboard_unauthenticated PASSED       [ 34%]
+tests/test_main.py::test_selic_endpoint PASSED                           [ 39%]
+tests/test_protected.py::test_protected_endpoint FAILED                  [ 43%]
+tests/test_selic.py::test_selic PASSED                                   [ 47%]
+tests/test_sp500.py::test_upload_sem_token FAILED                        [ 52%]
+tests/test_sp500.py::test_upload_extensao_invalida FAILED                [ 56%]
+tests/test_sp500.py::test_upload_sem_arquivo FAILED                      [ 60%]
+tests/test_status.py::test_status FAILED                                 [ 65%]
+tests/test_submissoes.py::test_get_submissoes_autenticado FAILED         [ 69%]
+tests/test_submissoes.py::test_get_submissoes_nao_autenticado PASSED     [ 73%]
+tests/test_treasury.py::test_get_treasury FAILED                         [ 78%]
+tests/test_upload.py::test_upload_dataset_success FAILED                 [ 82%]
+tests/test_upload.py::test_upload_sem_token PASSED                       [ 86%]
+tests/test_upload.py::test_upload_extensao_invalida FAILED               [ 91%]
+tests/test_upload.py::test_upload_sem_arquivo PASSED                     [ 95%]
+tests/test_users.py::test_login_and_me FAILED                            [100%]
+
+=================================== FAILURES ===================================
+___________________________________ test_cdi ___________________________________
+
+    @pytest.mark.asyncio
+    async def test_cdi():
+        with respx.mock():
+            respx.get("http://test/api/v1/cdi").mock(
+                return_value=httpx.Response(200, json={"date": "2023-01-01", "value": 2.5})
+            )
+    
+>           async with AsyncClient(
+                base_url="http://test",
+                app=app,
+                follow_redirects=True
+            ) as client:
+E           TypeError: AsyncClient.__init__() got an unexpected keyword argument 'app'
+
+tests/test_cdi.py:16: TypeError
+________________________ test_get_desafios_autenticado _________________________
+  + Exception Group Traceback (most recent call last):
+  |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/_utils.py", line 77, in collapse_excgroups
+  |     yield
+  |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py", line 173, in __call__
+  |     async with anyio.create_task_group() as task_group:
+  |                ~~~~~~~~~~~~~~~~~~~~~~~^^
+  |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 729, in __aexit__
+  |     raise BaseExceptionGroup(
+  |         "unhandled errors in a TaskGroup", self._exceptions
+  |     ) from None
+  | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/runner.py", line 325, in from_call
+    |     result: TResult | None = func()
+    |                              ~~~~^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/runner.py", line 226, in <lambda>
+    |     lambda: runtest_hook(item=item, **kwds), when=when, reraise=reraise
+    |             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_hooks.py", line 499, in __call__
+    |     return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+    |            ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_manager.py", line 106, in _hookexec
+    |     return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+    |            ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_callers.py", line 174, in _multicall
+    |     return outcome.get_result()
+    |            ~~~~~~~~~~~~~~~~~~^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_result.py", line 93, in get_result
+    |     raise exc.with_traceback(exc.__traceback__)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_callers.py", line 159, in _multicall
+    |     teardown.throw(outcome._exception)
+    |     ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/threadexception.py", line 88, in pytest_runtest_call
+    |     yield from thread_exception_runtest_hook()
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/threadexception.py", line 64, in thread_exception_runtest_hook
+    |     yield
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_callers.py", line 159, in _multicall
+    |     teardown.throw(outcome._exception)
+    |     ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/unraisableexception.py", line 91, in pytest_runtest_call
+    |     yield from unraisable_exception_runtest_hook()
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/unraisableexception.py", line 66, in unraisable_exception_runtest_hook
+    |     yield
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_callers.py", line 159, in _multicall
+    |     teardown.throw(outcome._exception)
+    |     ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/logging.py", line 830, in pytest_runtest_call
+    |     yield from self._runtest_for(item, "call")
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/logging.py", line 813, in _runtest_for
+    |     yield
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_callers.py", line 159, in _multicall
+    |     teardown.throw(outcome._exception)
+    |     ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/capture.py", line 882, in pytest_runtest_call
+    |     return (yield)
+    |             ^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_callers.py", line 159, in _multicall
+    |     teardown.throw(outcome._exception)
+    |     ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/skipping.py", line 252, in pytest_runtest_call
+    |     return (yield)
+    |             ^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_callers.py", line 95, in _multicall
+    |     res = hook_impl.function(*args)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/runner.py", line 158, in pytest_runtest_call
+    |     item.runtest()
+    |     ~~~~~~~~~~~~^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pytest_asyncio/plugin.py", line 520, in runtest
+    |     super().runtest()
+    |     ~~~~~~~~~~~~~~~^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/python.py", line 1595, in runtest
+    |     self.ihook.pytest_pyfunc_call(pyfuncitem=self)
+    |     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_hooks.py", line 499, in __call__
+    |     return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+    |            ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_manager.py", line 106, in _hookexec
+    |     return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+    |            ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_callers.py", line 174, in _multicall
+    |     return outcome.get_result()
+    |            ~~~~~~~~~~~~~~~~~~^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_result.py", line 93, in get_result
+    |     raise exc.with_traceback(exc.__traceback__)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_callers.py", line 95, in _multicall
+    |     res = hook_impl.function(*args)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/python.py", line 127, in pytest_pyfunc_call
+    |     result = testfunction(**testargs)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pytest_asyncio/plugin.py", line 1040, in inner
+    |     _loop.run_until_complete(task)
+    |     ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+    |   File "/usr/lib/python3.13/asyncio/base_events.py", line 719, in run_until_complete
+    |     return future.result()
+    |            ~~~~~~~~~~~~~^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/tests/test_desafios.py", line 24, in test_get_desafios_autenticado
+    |     response = await ac.get(
+    |                ^^^^^^^^^^^^^
+    |     ...<2 lines>...
+    |     )
+    |     ^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/httpx/_client.py", line 1747, in get
+    |     return await self.request(
+    |            ^^^^^^^^^^^^^^^^^^^
+    |     ...<9 lines>...
+    |     )
+    |     ^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/httpx/_client.py", line 1519, in request
+    |     return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/httpx/_client.py", line 1608, in send
+    |     response = await self._send_handling_auth(
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     ...<4 lines>...
+    |     )
+    |     ^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/httpx/_client.py", line 1636, in _send_handling_auth
+    |     response = await self._send_handling_redirects(
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     ...<3 lines>...
+    |     )
+    |     ^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/httpx/_client.py", line 1673, in _send_handling_redirects
+    |     response = await self._send_single_request(request)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/httpx/_client.py", line 1709, in _send_single_request
+    |     response = await transport.handle_async_request(request)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/httpx/_transports/asgi.py", line 170, in handle_async_request
+    |     await self.app(scope, receive, send)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/fastapi/applications.py", line 1039, in __call__
+    |     await super().__call__(scope, receive, send)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/applications.py", line 113, in __call__
+    |     await self.middleware_stack(scope, receive, send)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/errors.py", line 187, in __call__
+    |     raise exc
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/errors.py", line 165, in __call__
+    |     await self.app(scope, receive, _send)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py", line 172, in __call__
+    |     with recv_stream, send_stream, collapse_excgroups():
+    |                                    ~~~~~~~~~~~~~~~~~~^^
+    |   File "/usr/lib/python3.13/contextlib.py", line 162, in __exit__
+    |     self.gen.throw(value)
+    |     ~~~~~~~~~~~~~~^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/_utils.py", line 83, in collapse_excgroups
+    |     raise exc
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py", line 174, in __call__
+    |     response = await self.dispatch_func(request, call_next)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/slowapi/middleware.py", line 133, in dispatch
+    |     response = await call_next(request)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py", line 152, in call_next
+    |     raise app_exc
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py", line 139, in coro
+    |     await self.app(scope, receive_or_disconnect, send_no_error)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py", line 172, in __call__
+    |     with recv_stream, send_stream, collapse_excgroups():
+    |                                    ~~~~~~~~~~~~~~~~~~^^
+    |   File "/usr/lib/python3.13/contextlib.py", line 162, in __exit__
+    |     self.gen.throw(value)
+    |     ~~~~~~~~~~~~~~^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/_utils.py", line 83, in collapse_excgroups
+    |     raise exc
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py", line 174, in __call__
+    |     response = await self.dispatch_func(request, call_next)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/app/middleware/logging.py", line 13, in dispatch
+    |     response = await call_next(request)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py", line 152, in call_next
+    |     raise app_exc
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py", line 139, in coro
+    |     await self.app(scope, receive_or_disconnect, send_no_error)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 59, in __call__
+    |     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/_exception_handler.py", line 54, in wrapped_app
+    |     raise exc
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/_exception_handler.py", line 43, in wrapped_app
+    |     await app(scope, receive, sender)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/routing.py", line 714, in __call__
+    |     await self.middleware_stack(scope, receive, send)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/routing.py", line 734, in app
+    |     await route.handle(scope, receive, send)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/routing.py", line 288, in handle
+    |     await self.app(scope, receive, send)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/routing.py", line 76, in app
+    |     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/_exception_handler.py", line 54, in wrapped_app
+    |     raise exc
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/_exception_handler.py", line 43, in wrapped_app
+    |     await app(scope, receive, sender)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/routing.py", line 73, in app
+    |     response = await f(request)
+    |                ^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/fastapi/routing.py", line 268, in app
+    |     raw_response = await run_endpoint_function(
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     ...<3 lines>...
+    |     )
+    |     ^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/fastapi/routing.py", line 181, in run_endpoint_function
+    |     return await run_in_threadpool(dependant.call, **values)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/concurrency.py", line 37, in run_in_threadpool
+    |     return await anyio.to_thread.run_sync(func)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/anyio/to_thread.py", line 56, in run_sync
+    |     return await get_async_backend().run_sync_in_worker_thread(
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |         func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     )
+    |     ^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2427, in run_sync_in_worker_thread
+    |     return await future
+    |            ^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 924, in run
+    |     result = context.run(func, *args)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/app/routes/v1/desafios.py", line 36, in listar_desafios
+    |     desafios = session.exec(select(Challenge)).all()
+    |                ^^^^^^^^^^^^
+    | AttributeError: 'AsyncSession' object has no attribute 'exec'
+    +------------------------------------
+
+During handling of the above exception, another exception occurred:
+
+    @pytest.mark.asyncio
+    async def test_get_desafios_autenticado():
+        debug_routes()
+    
+        token = create_access_token(data={"sub": "1"})
+        transport = ASGITransport(app=app)
+    
+        async with AsyncClient(transport=transport, base_url="http://test") as ac:
+>           response = await ac.get(
+                "/api/v1/desafios/",
+                headers={"Authorization": f"Bearer {token}"}
+            )
+
+tests/test_desafios.py:24: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.projetoapi/lib/python3.13/site-packages/httpx/_client.py:1747: in get
+    return await self.request(
+.projetoapi/lib/python3.13/site-packages/httpx/_client.py:1519: in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+.projetoapi/lib/python3.13/site-packages/httpx/_client.py:1608: in send
+    response = await self._send_handling_auth(
+.projetoapi/lib/python3.13/site-packages/httpx/_client.py:1636: in _send_handling_auth
+    response = await self._send_handling_redirects(
+.projetoapi/lib/python3.13/site-packages/httpx/_client.py:1673: in _send_handling_redirects
+    response = await self._send_single_request(request)
+.projetoapi/lib/python3.13/site-packages/httpx/_client.py:1709: in _send_single_request
+    response = await transport.handle_async_request(request)
+.projetoapi/lib/python3.13/site-packages/httpx/_transports/asgi.py:170: in handle_async_request
+    await self.app(scope, receive, send)
+.projetoapi/lib/python3.13/site-packages/fastapi/applications.py:1039: in __call__
+    await super().__call__(scope, receive, send)
+.projetoapi/lib/python3.13/site-packages/starlette/applications.py:113: in __call__
+    await self.middleware_stack(scope, receive, send)
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/errors.py:187: in __call__
+    raise exc
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/errors.py:165: in __call__
+    await self.app(scope, receive, _send)
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py:172: in __call__
+    with recv_stream, send_stream, collapse_excgroups():
+/usr/lib/python3.13/contextlib.py:162: in __exit__
+    self.gen.throw(value)
+.projetoapi/lib/python3.13/site-packages/starlette/_utils.py:83: in collapse_excgroups
+    raise exc
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py:174: in __call__
+    response = await self.dispatch_func(request, call_next)
+.projetoapi/lib/python3.13/site-packages/slowapi/middleware.py:133: in dispatch
+    response = await call_next(request)
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py:152: in call_next
+    raise app_exc
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py:139: in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py:172: in __call__
+    with recv_stream, send_stream, collapse_excgroups():
+/usr/lib/python3.13/contextlib.py:162: in __exit__
+    self.gen.throw(value)
+.projetoapi/lib/python3.13/site-packages/starlette/_utils.py:83: in collapse_excgroups
+    raise exc
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py:174: in __call__
+    response = await self.dispatch_func(request, call_next)
+app/middleware/logging.py:13: in dispatch
+    response = await call_next(request)
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py:152: in call_next
+    raise app_exc
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py:139: in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/exceptions.py:59: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+.projetoapi/lib/python3.13/site-packages/starlette/_exception_handler.py:54: in wrapped_app
+    raise exc
+.projetoapi/lib/python3.13/site-packages/starlette/_exception_handler.py:43: in wrapped_app
+    await app(scope, receive, sender)
+.projetoapi/lib/python3.13/site-packages/starlette/routing.py:714: in __call__
+    await self.middleware_stack(scope, receive, send)
+.projetoapi/lib/python3.13/site-packages/starlette/routing.py:734: in app
+    await route.handle(scope, receive, send)
+.projetoapi/lib/python3.13/site-packages/starlette/routing.py:288: in handle
+    await self.app(scope, receive, send)
+.projetoapi/lib/python3.13/site-packages/starlette/routing.py:76: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+.projetoapi/lib/python3.13/site-packages/starlette/_exception_handler.py:54: in wrapped_app
+    raise exc
+.projetoapi/lib/python3.13/site-packages/starlette/_exception_handler.py:43: in wrapped_app
+    await app(scope, receive, sender)
+.projetoapi/lib/python3.13/site-packages/starlette/routing.py:73: in app
+    response = await f(request)
+.projetoapi/lib/python3.13/site-packages/fastapi/routing.py:268: in app
+    raw_response = await run_endpoint_function(
+.projetoapi/lib/python3.13/site-packages/fastapi/routing.py:181: in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+.projetoapi/lib/python3.13/site-packages/starlette/concurrency.py:37: in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+.projetoapi/lib/python3.13/site-packages/anyio/to_thread.py:56: in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+.projetoapi/lib/python3.13/site-packages/anyio/_backends/_asyncio.py:2427: in run_sync_in_worker_thread
+    return await future
+.projetoapi/lib/python3.13/site-packages/anyio/_backends/_asyncio.py:924: in run
+    result = context.run(func, *args)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+session = <sqlalchemy.orm.session.AsyncSession object at 0x7f79e9604d70>
+current_user = {'id': 1}
+
+    @router.get("/", response_model=List[ChallengeRead])
+    def listar_desafios(
+        session: Session = Depends(get_session),
+        current_user: User = Depends(
+            get_current_user
+        ),  # <- adicionado para bater com o teste
+    ):
+>       desafios = session.exec(select(Challenge)).all()
+E       AttributeError: 'AsyncSession' object has no attribute 'exec'
+
+app/routes/v1/desafios.py:36: AttributeError
+----------------------------- Captured stdout call -----------------------------
+
+
+--- Rotas Registradas no app ---
+  • /openapi.json
+  • /docs
+  • /docs/oauth2-redirect
+  • /redoc
+  • /
+  • /api/v1/selic
+  • /api/v1/ipca
+  • /api/v1/cdi
+  • /api/v1/ibov
+  • /api/v1/sp500
+  • /api/v1/usd_brl
+  • /api/v1/treasury
+  • /api/v1/users/users
+  • /api/v1/users/users/{user_id}
+  • /api/v1/users/users/{user_id}
+  • /api/v1/users/users/{user_id}
+  • /api/v1/token/
+  • /api/v1/me
+  • /api/v1/webscraping/infomoney
+  • /api/v1/protected
+  • /api/v1/status
+  • /api/v1/upload/
+  • /api/v1/submissoes/
+  • /api/v1/submissoes/
+  • /api/v1/desafios/
+  • /api/v1/desafios/
+  • /api/v1/leaderboard/
+  • /openapi.json
+  • /api/v1/leaderboard/
+--- Fim das rotas ---
+
+
+______________________ test_get_desafios_nao_autenticado _______________________
+  + Exception Group Traceback (most recent call last):
+  |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/_utils.py", line 77, in collapse_excgroups
+  |     yield
+  |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py", line 173, in __call__
+  |     async with anyio.create_task_group() as task_group:
+  |                ~~~~~~~~~~~~~~~~~~~~~~~^^
+  |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 729, in __aexit__
+  |     raise BaseExceptionGroup(
+  |         "unhandled errors in a TaskGroup", self._exceptions
+  |     ) from None
+  | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/runner.py", line 325, in from_call
+    |     result: TResult | None = func()
+    |                              ~~~~^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/runner.py", line 226, in <lambda>
+    |     lambda: runtest_hook(item=item, **kwds), when=when, reraise=reraise
+    |             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_hooks.py", line 499, in __call__
+    |     return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+    |            ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_manager.py", line 106, in _hookexec
+    |     return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+    |            ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_callers.py", line 174, in _multicall
+    |     return outcome.get_result()
+    |            ~~~~~~~~~~~~~~~~~~^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_result.py", line 93, in get_result
+    |     raise exc.with_traceback(exc.__traceback__)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_callers.py", line 159, in _multicall
+    |     teardown.throw(outcome._exception)
+    |     ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/threadexception.py", line 88, in pytest_runtest_call
+    |     yield from thread_exception_runtest_hook()
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/threadexception.py", line 64, in thread_exception_runtest_hook
+    |     yield
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_callers.py", line 159, in _multicall
+    |     teardown.throw(outcome._exception)
+    |     ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/unraisableexception.py", line 91, in pytest_runtest_call
+    |     yield from unraisable_exception_runtest_hook()
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/unraisableexception.py", line 66, in unraisable_exception_runtest_hook
+    |     yield
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_callers.py", line 159, in _multicall
+    |     teardown.throw(outcome._exception)
+    |     ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/logging.py", line 830, in pytest_runtest_call
+    |     yield from self._runtest_for(item, "call")
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/logging.py", line 813, in _runtest_for
+    |     yield
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_callers.py", line 159, in _multicall
+    |     teardown.throw(outcome._exception)
+    |     ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/capture.py", line 882, in pytest_runtest_call
+    |     return (yield)
+    |             ^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_callers.py", line 159, in _multicall
+    |     teardown.throw(outcome._exception)
+    |     ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/skipping.py", line 252, in pytest_runtest_call
+    |     return (yield)
+    |             ^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_callers.py", line 95, in _multicall
+    |     res = hook_impl.function(*args)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/runner.py", line 158, in pytest_runtest_call
+    |     item.runtest()
+    |     ~~~~~~~~~~~~^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pytest_asyncio/plugin.py", line 520, in runtest
+    |     super().runtest()
+    |     ~~~~~~~~~~~~~~~^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/python.py", line 1595, in runtest
+    |     self.ihook.pytest_pyfunc_call(pyfuncitem=self)
+    |     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_hooks.py", line 499, in __call__
+    |     return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+    |            ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_manager.py", line 106, in _hookexec
+    |     return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+    |            ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_callers.py", line 174, in _multicall
+    |     return outcome.get_result()
+    |            ~~~~~~~~~~~~~~~~~~^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_result.py", line 93, in get_result
+    |     raise exc.with_traceback(exc.__traceback__)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_callers.py", line 95, in _multicall
+    |     res = hook_impl.function(*args)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/python.py", line 127, in pytest_pyfunc_call
+    |     result = testfunction(**testargs)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pytest_asyncio/plugin.py", line 1040, in inner
+    |     _loop.run_until_complete(task)
+    |     ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+    |   File "/usr/lib/python3.13/asyncio/base_events.py", line 719, in run_until_complete
+    |     return future.result()
+    |            ~~~~~~~~~~~~~^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/tests/test_desafios.py", line 37, in test_get_desafios_nao_autenticado
+    |     response = await ac.get("/api/v1/desafios/")
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/httpx/_client.py", line 1747, in get
+    |     return await self.request(
+    |            ^^^^^^^^^^^^^^^^^^^
+    |     ...<9 lines>...
+    |     )
+    |     ^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/httpx/_client.py", line 1519, in request
+    |     return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/httpx/_client.py", line 1608, in send
+    |     response = await self._send_handling_auth(
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     ...<4 lines>...
+    |     )
+    |     ^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/httpx/_client.py", line 1636, in _send_handling_auth
+    |     response = await self._send_handling_redirects(
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     ...<3 lines>...
+    |     )
+    |     ^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/httpx/_client.py", line 1673, in _send_handling_redirects
+    |     response = await self._send_single_request(request)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/httpx/_client.py", line 1709, in _send_single_request
+    |     response = await transport.handle_async_request(request)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/httpx/_transports/asgi.py", line 170, in handle_async_request
+    |     await self.app(scope, receive, send)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/fastapi/applications.py", line 1039, in __call__
+    |     await super().__call__(scope, receive, send)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/applications.py", line 113, in __call__
+    |     await self.middleware_stack(scope, receive, send)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/errors.py", line 187, in __call__
+    |     raise exc
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/errors.py", line 165, in __call__
+    |     await self.app(scope, receive, _send)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py", line 172, in __call__
+    |     with recv_stream, send_stream, collapse_excgroups():
+    |                                    ~~~~~~~~~~~~~~~~~~^^
+    |   File "/usr/lib/python3.13/contextlib.py", line 162, in __exit__
+    |     self.gen.throw(value)
+    |     ~~~~~~~~~~~~~~^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/_utils.py", line 83, in collapse_excgroups
+    |     raise exc
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py", line 174, in __call__
+    |     response = await self.dispatch_func(request, call_next)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/slowapi/middleware.py", line 133, in dispatch
+    |     response = await call_next(request)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py", line 152, in call_next
+    |     raise app_exc
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py", line 139, in coro
+    |     await self.app(scope, receive_or_disconnect, send_no_error)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py", line 172, in __call__
+    |     with recv_stream, send_stream, collapse_excgroups():
+    |                                    ~~~~~~~~~~~~~~~~~~^^
+    |   File "/usr/lib/python3.13/contextlib.py", line 162, in __exit__
+    |     self.gen.throw(value)
+    |     ~~~~~~~~~~~~~~^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/_utils.py", line 83, in collapse_excgroups
+    |     raise exc
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py", line 174, in __call__
+    |     response = await self.dispatch_func(request, call_next)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/app/middleware/logging.py", line 13, in dispatch
+    |     response = await call_next(request)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py", line 152, in call_next
+    |     raise app_exc
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py", line 139, in coro
+    |     await self.app(scope, receive_or_disconnect, send_no_error)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 59, in __call__
+    |     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/_exception_handler.py", line 54, in wrapped_app
+    |     raise exc
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/_exception_handler.py", line 43, in wrapped_app
+    |     await app(scope, receive, sender)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/routing.py", line 714, in __call__
+    |     await self.middleware_stack(scope, receive, send)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/routing.py", line 734, in app
+    |     await route.handle(scope, receive, send)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/routing.py", line 288, in handle
+    |     await self.app(scope, receive, send)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/routing.py", line 76, in app
+    |     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/_exception_handler.py", line 54, in wrapped_app
+    |     raise exc
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/_exception_handler.py", line 43, in wrapped_app
+    |     await app(scope, receive, sender)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/routing.py", line 73, in app
+    |     response = await f(request)
+    |                ^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/fastapi/routing.py", line 268, in app
+    |     raw_response = await run_endpoint_function(
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     ...<3 lines>...
+    |     )
+    |     ^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/fastapi/routing.py", line 181, in run_endpoint_function
+    |     return await run_in_threadpool(dependant.call, **values)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/concurrency.py", line 37, in run_in_threadpool
+    |     return await anyio.to_thread.run_sync(func)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/anyio/to_thread.py", line 56, in run_sync
+    |     return await get_async_backend().run_sync_in_worker_thread(
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |         func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     )
+    |     ^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2427, in run_sync_in_worker_thread
+    |     return await future
+    |            ^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 924, in run
+    |     result = context.run(func, *args)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/app/routes/v1/desafios.py", line 36, in listar_desafios
+    |     desafios = session.exec(select(Challenge)).all()
+    |                ^^^^^^^^^^^^
+    | AttributeError: 'AsyncSession' object has no attribute 'exec'
+    +------------------------------------
+
+During handling of the above exception, another exception occurred:
+
+    @pytest.mark.asyncio
+    async def test_get_desafios_nao_autenticado():
+        transport = ASGITransport(app=app)
+    
+        async with AsyncClient(transport=transport, base_url="http://test") as ac:
+>           response = await ac.get("/api/v1/desafios/")
+
+tests/test_desafios.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.projetoapi/lib/python3.13/site-packages/httpx/_client.py:1747: in get
+    return await self.request(
+.projetoapi/lib/python3.13/site-packages/httpx/_client.py:1519: in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+.projetoapi/lib/python3.13/site-packages/httpx/_client.py:1608: in send
+    response = await self._send_handling_auth(
+.projetoapi/lib/python3.13/site-packages/httpx/_client.py:1636: in _send_handling_auth
+    response = await self._send_handling_redirects(
+.projetoapi/lib/python3.13/site-packages/httpx/_client.py:1673: in _send_handling_redirects
+    response = await self._send_single_request(request)
+.projetoapi/lib/python3.13/site-packages/httpx/_client.py:1709: in _send_single_request
+    response = await transport.handle_async_request(request)
+.projetoapi/lib/python3.13/site-packages/httpx/_transports/asgi.py:170: in handle_async_request
+    await self.app(scope, receive, send)
+.projetoapi/lib/python3.13/site-packages/fastapi/applications.py:1039: in __call__
+    await super().__call__(scope, receive, send)
+.projetoapi/lib/python3.13/site-packages/starlette/applications.py:113: in __call__
+    await self.middleware_stack(scope, receive, send)
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/errors.py:187: in __call__
+    raise exc
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/errors.py:165: in __call__
+    await self.app(scope, receive, _send)
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py:172: in __call__
+    with recv_stream, send_stream, collapse_excgroups():
+/usr/lib/python3.13/contextlib.py:162: in __exit__
+    self.gen.throw(value)
+.projetoapi/lib/python3.13/site-packages/starlette/_utils.py:83: in collapse_excgroups
+    raise exc
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py:174: in __call__
+    response = await self.dispatch_func(request, call_next)
+.projetoapi/lib/python3.13/site-packages/slowapi/middleware.py:133: in dispatch
+    response = await call_next(request)
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py:152: in call_next
+    raise app_exc
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py:139: in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py:172: in __call__
+    with recv_stream, send_stream, collapse_excgroups():
+/usr/lib/python3.13/contextlib.py:162: in __exit__
+    self.gen.throw(value)
+.projetoapi/lib/python3.13/site-packages/starlette/_utils.py:83: in collapse_excgroups
+    raise exc
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py:174: in __call__
+    response = await self.dispatch_func(request, call_next)
+app/middleware/logging.py:13: in dispatch
+    response = await call_next(request)
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py:152: in call_next
+    raise app_exc
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py:139: in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/exceptions.py:59: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+.projetoapi/lib/python3.13/site-packages/starlette/_exception_handler.py:54: in wrapped_app
+    raise exc
+.projetoapi/lib/python3.13/site-packages/starlette/_exception_handler.py:43: in wrapped_app
+    await app(scope, receive, sender)
+.projetoapi/lib/python3.13/site-packages/starlette/routing.py:714: in __call__
+    await self.middleware_stack(scope, receive, send)
+.projetoapi/lib/python3.13/site-packages/starlette/routing.py:734: in app
+    await route.handle(scope, receive, send)
+.projetoapi/lib/python3.13/site-packages/starlette/routing.py:288: in handle
+    await self.app(scope, receive, send)
+.projetoapi/lib/python3.13/site-packages/starlette/routing.py:76: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+.projetoapi/lib/python3.13/site-packages/starlette/_exception_handler.py:54: in wrapped_app
+    raise exc
+.projetoapi/lib/python3.13/site-packages/starlette/_exception_handler.py:43: in wrapped_app
+    await app(scope, receive, sender)
+.projetoapi/lib/python3.13/site-packages/starlette/routing.py:73: in app
+    response = await f(request)
+.projetoapi/lib/python3.13/site-packages/fastapi/routing.py:268: in app
+    raw_response = await run_endpoint_function(
+.projetoapi/lib/python3.13/site-packages/fastapi/routing.py:181: in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+.projetoapi/lib/python3.13/site-packages/starlette/concurrency.py:37: in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+.projetoapi/lib/python3.13/site-packages/anyio/to_thread.py:56: in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+.projetoapi/lib/python3.13/site-packages/anyio/_backends/_asyncio.py:2427: in run_sync_in_worker_thread
+    return await future
+.projetoapi/lib/python3.13/site-packages/anyio/_backends/_asyncio.py:924: in run
+    result = context.run(func, *args)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+session = <sqlalchemy.orm.session.AsyncSession object at 0x7f79e3ee8410>
+current_user = {'id': 1}
+
+    @router.get("/", response_model=List[ChallengeRead])
+    def listar_desafios(
+        session: Session = Depends(get_session),
+        current_user: User = Depends(
+            get_current_user
+        ),  # <- adicionado para bater com o teste
+    ):
+>       desafios = session.exec(select(Challenge)).all()
+E       AttributeError: 'AsyncSession' object has no attribute 'exec'
+
+app/routes/v1/desafios.py:36: AttributeError
+_________________________ test_get_ibov_mock[asyncio] __________________________
+
+    @pytest.mark.anyio(backend="asyncio")
+    @respx.mock
+    async def test_get_ibov_mock():
+        mock_response = {
+            "chart": {
+                "result": [{
+                    "timestamp": [1711497600],
+                    "indicators": {
+                        "quote": [{
+                            "close": [128560.24]
+                        }]
+                    }
+                }],
+                "error": None
+            }
+        }
+    
+        respx.get("https://query1.finance.yahoo.com/v8/finance/chart/^BVSP?interval=1d&range=1d").mock(
+            return_value=Response(200, json=mock_response)
+        )
+    
+        transport = ASGITransport(app=app)
+        async with AsyncClient(transport=transport, base_url="http://test") as ac:
+            response = await ac.get("/api/v1/ibov")
+    
+>       assert response.status_code == 200
+E       assert 500 == 200
+E        +  where 500 = <Response [500 Internal Server Error]>.status_code
+
+tests/test_ibov.py:35: AssertionError
+----------------------------- Captured stdout call -----------------------------
+GET /api/v1/ibov - Status: 500 - Tempo: 12.09ms - User-Agent: python-httpx/0.28.1
+----------------------------- Captured stderr call -----------------------------
+2025-04-07 09:42:04,537 - httpx - INFO - HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/^BVSP?interval=1d&range=1d "HTTP/1.1 200 OK"
+2025-04-07 09:42:04,539 - httpx - INFO - HTTP Request: GET http://test/api/v1/ibov "HTTP/1.1 500 Internal Server Error"
+------------------------------ Captured log call -------------------------------
+INFO     httpx:_client.py:1719 HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/^BVSP?interval=1d&range=1d "HTTP/1.1 200 OK"
+INFO     httpx:_client.py:1719 HTTP Request: GET http://test/api/v1/ibov "HTTP/1.1 500 Internal Server Error"
+___________________________ test_get_ibov_mock[trio] ___________________________
+
+asynclib_name = 'trio'
+
+    def get_async_backend(asynclib_name: str | None = None) -> type[AsyncBackend]:
+        if asynclib_name is None:
+            asynclib_name = sniffio.current_async_library()
+    
+        # We use our own dict instead of sys.modules to get the already imported back-end
+        # class because the appropriate modules in sys.modules could potentially be only
+        # partially initialized
+        try:
+>           return loaded_backends[asynclib_name]
+E           KeyError: 'trio'
+
+.projetoapi/lib/python3.13/site-packages/anyio/_core/_eventloop.py:162: KeyError
+
+During handling of the above exception, another exception occurred:
+
+pyfuncitem = <Function test_get_ibov_mock[trio]>
+
+    @pytest.hookimpl(tryfirst=True)
+    def pytest_pyfunc_call(pyfuncitem: Any) -> bool | None:
+        def run_with_hypothesis(**kwargs: Any) -> None:
+            with get_runner(backend_name, backend_options) as runner:
+                runner.run_test(original_func, kwargs)
+    
+        backend = pyfuncitem.funcargs.get("anyio_backend")
+        if backend:
+            backend_name, backend_options = extract_backend_and_options(backend)
+    
+            if hasattr(pyfuncitem.obj, "hypothesis"):
+                # Wrap the inner test function unless it's already wrapped
+                original_func = pyfuncitem.obj.hypothesis.inner_test
+                if original_func.__qualname__ != run_with_hypothesis.__qualname__:
+                    if iscoroutinefunction(original_func):
+                        pyfuncitem.obj.hypothesis.inner_test = run_with_hypothesis
+    
+                return None
+    
+            if iscoroutinefunction(pyfuncitem.obj):
+                funcargs = pyfuncitem.funcargs
+                testargs = {arg: funcargs[arg] for arg in pyfuncitem._fixtureinfo.argnames}
+>               with get_runner(backend_name, backend_options) as runner:
+
+.projetoapi/lib/python3.13/site-packages/anyio/pytest_plugin.py:158: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.13/contextlib.py:141: in __enter__
+    return next(self.gen)
+.projetoapi/lib/python3.13/site-packages/anyio/pytest_plugin.py:43: in get_runner
+    asynclib = get_async_backend(backend_name)
+.projetoapi/lib/python3.13/site-packages/anyio/_core/_eventloop.py:164: in get_async_backend
+    module = import_module(f"anyio._backends._{asynclib_name}")
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    from __future__ import annotations
+    
+    import array
+    import math
+    import os
+    import socket
+    import sys
+    import types
+    import weakref
+    from collections.abc import (AsyncGenerator, AsyncIterator, Awaitable,
+                                 Callable, Collection, Coroutine, Iterable,
+                                 Sequence)
+    from concurrent.futures import Future
+    from contextlib import AbstractContextManager
+    from dataclasses import dataclass
+    from functools import partial
+    from io import IOBase
+    from os import PathLike
+    from signal import Signals
+    from socket import AddressFamily, SocketKind
+    from types import TracebackType
+    from typing import (IO, TYPE_CHECKING, Any, Generic, NoReturn, TypeVar, cast,
+                        overload)
+    
+>   import trio.from_thread
+E   ModuleNotFoundError: No module named 'trio'
+
+.projetoapi/lib/python3.13/site-packages/anyio/_backends/_trio.py:25: ModuleNotFoundError
+___________________________ test_infomoney_scraping ____________________________
+
+    def test_infomoney_scraping():
+        response = client.get("/api/v1/webscraping/infomoney")
+>       assert response.status_code == 200
+E       assert 500 == 200
+E        +  where 500 = <Response [500 Internal Server Error]>.status_code
+
+tests/test_infomoney.py:9: AssertionError
+----------------------------- Captured stdout call -----------------------------
+GET /api/v1/webscraping/infomoney - Status: 500 - Tempo: 6143.24ms - User-Agent: testclient
+----------------------------- Captured stderr call -----------------------------
+2025-04-07 09:42:10,765 - httpx - INFO - HTTP Request: GET http://testserver/api/v1/webscraping/infomoney "HTTP/1.1 500 Internal Server Error"
+------------------------------ Captured log call -------------------------------
+INFO     httpx:_client.py:1004 HTTP Request: GET http://testserver/api/v1/webscraping/infomoney "HTTP/1.1 500 Internal Server Error"
+___________________________ test_protected_endpoint ____________________________
+
+    def test_protected_endpoint():
+>       seed_user()
+
+tests/test_protected.py:24: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def seed_user():
+>       session = next(get_session())
+E       TypeError: 'async_generator' object is not an iterator
+
+tests/test_protected.py:12: TypeError
+____________________________ test_upload_sem_token _____________________________
+
+tmp_path = PosixPath('/tmp/pytest-of-maximiliancfcnpi/pytest-1/test_upload_sem_token0')
+
+    @pytest.mark.asyncio
+    async def test_upload_sem_token(tmp_path):
+        test_file = tmp_path / "sem_token.csv"
+        test_file.write_text("coluna1,coluna2\nvalor1,valor2")
+    
+>       async with AsyncClient(app=app, base_url="http://test") as ac:
+E       TypeError: AsyncClient.__init__() got an unexpected keyword argument 'app'
+
+tests/test_sp500.py:13: TypeError
+________________________ test_upload_extensao_invalida _________________________
+
+tmp_path = PosixPath('/tmp/pytest-of-maximiliancfcnpi/pytest-1/test_upload_extensao_invalida0')
+
+    @pytest.mark.asyncio
+    async def test_upload_extensao_invalida(tmp_path):
+>       token = create_access_token(subject="1")
+E       TypeError: create_access_token() got an unexpected keyword argument 'subject'
+
+tests/test_sp500.py:25: TypeError
+___________________________ test_upload_sem_arquivo ____________________________
+
+    @pytest.mark.asyncio
+    async def test_upload_sem_arquivo():
+>       token = create_access_token(subject="1")
+E       TypeError: create_access_token() got an unexpected keyword argument 'subject'
+
+tests/test_sp500.py:43: TypeError
+_________________________________ test_status __________________________________
+
+    def test_status():
+        response = client.get("/api/v1/status")
+        assert response.status_code == 200
+        data = response.json()
+        assert data["status"] == "ok"
+>       assert "API" in data["message"]
+E       KeyError: 'message'
+
+tests/test_status.py:14: KeyError
+----------------------------- Captured stdout call -----------------------------
+GET /api/v1/status - Status: 200 - Tempo: 0.78ms - User-Agent: testclient
+----------------------------- Captured stderr call -----------------------------
+2025-04-07 09:42:10,815 - httpx - INFO - HTTP Request: GET http://testserver/api/v1/status "HTTP/1.1 200 OK"
+------------------------------ Captured log call -------------------------------
+INFO     httpx:_client.py:1004 HTTP Request: GET http://testserver/api/v1/status "HTTP/1.1 200 OK"
+_______________________ test_get_submissoes_autenticado ________________________
+  + Exception Group Traceback (most recent call last):
+  |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/_utils.py", line 77, in collapse_excgroups
+  |     yield
+  |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py", line 173, in __call__
+  |     async with anyio.create_task_group() as task_group:
+  |                ~~~~~~~~~~~~~~~~~~~~~~~^^
+  |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 729, in __aexit__
+  |     raise BaseExceptionGroup(
+  |         "unhandled errors in a TaskGroup", self._exceptions
+  |     ) from None
+  | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/runner.py", line 325, in from_call
+    |     result: TResult | None = func()
+    |                              ~~~~^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/runner.py", line 226, in <lambda>
+    |     lambda: runtest_hook(item=item, **kwds), when=when, reraise=reraise
+    |             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_hooks.py", line 499, in __call__
+    |     return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+    |            ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_manager.py", line 106, in _hookexec
+    |     return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+    |            ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_callers.py", line 174, in _multicall
+    |     return outcome.get_result()
+    |            ~~~~~~~~~~~~~~~~~~^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_result.py", line 93, in get_result
+    |     raise exc.with_traceback(exc.__traceback__)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_callers.py", line 159, in _multicall
+    |     teardown.throw(outcome._exception)
+    |     ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/threadexception.py", line 88, in pytest_runtest_call
+    |     yield from thread_exception_runtest_hook()
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/threadexception.py", line 64, in thread_exception_runtest_hook
+    |     yield
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_callers.py", line 159, in _multicall
+    |     teardown.throw(outcome._exception)
+    |     ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/unraisableexception.py", line 91, in pytest_runtest_call
+    |     yield from unraisable_exception_runtest_hook()
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/unraisableexception.py", line 66, in unraisable_exception_runtest_hook
+    |     yield
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_callers.py", line 159, in _multicall
+    |     teardown.throw(outcome._exception)
+    |     ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/logging.py", line 830, in pytest_runtest_call
+    |     yield from self._runtest_for(item, "call")
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/logging.py", line 813, in _runtest_for
+    |     yield
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_callers.py", line 159, in _multicall
+    |     teardown.throw(outcome._exception)
+    |     ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/capture.py", line 882, in pytest_runtest_call
+    |     return (yield)
+    |             ^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_callers.py", line 159, in _multicall
+    |     teardown.throw(outcome._exception)
+    |     ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/skipping.py", line 252, in pytest_runtest_call
+    |     return (yield)
+    |             ^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_callers.py", line 95, in _multicall
+    |     res = hook_impl.function(*args)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/runner.py", line 158, in pytest_runtest_call
+    |     item.runtest()
+    |     ~~~~~~~~~~~~^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pytest_asyncio/plugin.py", line 520, in runtest
+    |     super().runtest()
+    |     ~~~~~~~~~~~~~~~^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/python.py", line 1595, in runtest
+    |     self.ihook.pytest_pyfunc_call(pyfuncitem=self)
+    |     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_hooks.py", line 499, in __call__
+    |     return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+    |            ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_manager.py", line 106, in _hookexec
+    |     return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+    |            ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_callers.py", line 174, in _multicall
+    |     return outcome.get_result()
+    |            ~~~~~~~~~~~~~~~~~~^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_result.py", line 93, in get_result
+    |     raise exc.with_traceback(exc.__traceback__)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_callers.py", line 95, in _multicall
+    |     res = hook_impl.function(*args)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/python.py", line 127, in pytest_pyfunc_call
+    |     result = testfunction(**testargs)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pytest_asyncio/plugin.py", line 1040, in inner
+    |     _loop.run_until_complete(task)
+    |     ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+    |   File "/usr/lib/python3.13/asyncio/base_events.py", line 719, in run_until_complete
+    |     return future.result()
+    |            ~~~~~~~~~~~~~^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/tests/test_submissoes.py", line 14, in test_get_submissoes_autenticado
+    |     response = await ac.get(
+    |                ^^^^^^^^^^^^^
+    |     ...<2 lines>...
+    |     )
+    |     ^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/httpx/_client.py", line 1747, in get
+    |     return await self.request(
+    |            ^^^^^^^^^^^^^^^^^^^
+    |     ...<9 lines>...
+    |     )
+    |     ^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/httpx/_client.py", line 1519, in request
+    |     return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/httpx/_client.py", line 1608, in send
+    |     response = await self._send_handling_auth(
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     ...<4 lines>...
+    |     )
+    |     ^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/httpx/_client.py", line 1636, in _send_handling_auth
+    |     response = await self._send_handling_redirects(
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     ...<3 lines>...
+    |     )
+    |     ^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/httpx/_client.py", line 1673, in _send_handling_redirects
+    |     response = await self._send_single_request(request)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/httpx/_client.py", line 1709, in _send_single_request
+    |     response = await transport.handle_async_request(request)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/httpx/_transports/asgi.py", line 170, in handle_async_request
+    |     await self.app(scope, receive, send)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/fastapi/applications.py", line 1039, in __call__
+    |     await super().__call__(scope, receive, send)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/applications.py", line 113, in __call__
+    |     await self.middleware_stack(scope, receive, send)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/errors.py", line 187, in __call__
+    |     raise exc
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/errors.py", line 165, in __call__
+    |     await self.app(scope, receive, _send)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py", line 172, in __call__
+    |     with recv_stream, send_stream, collapse_excgroups():
+    |                                    ~~~~~~~~~~~~~~~~~~^^
+    |   File "/usr/lib/python3.13/contextlib.py", line 162, in __exit__
+    |     self.gen.throw(value)
+    |     ~~~~~~~~~~~~~~^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/_utils.py", line 83, in collapse_excgroups
+    |     raise exc
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py", line 174, in __call__
+    |     response = await self.dispatch_func(request, call_next)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/slowapi/middleware.py", line 133, in dispatch
+    |     response = await call_next(request)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py", line 152, in call_next
+    |     raise app_exc
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py", line 139, in coro
+    |     await self.app(scope, receive_or_disconnect, send_no_error)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py", line 172, in __call__
+    |     with recv_stream, send_stream, collapse_excgroups():
+    |                                    ~~~~~~~~~~~~~~~~~~^^
+    |   File "/usr/lib/python3.13/contextlib.py", line 162, in __exit__
+    |     self.gen.throw(value)
+    |     ~~~~~~~~~~~~~~^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/_utils.py", line 83, in collapse_excgroups
+    |     raise exc
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py", line 174, in __call__
+    |     response = await self.dispatch_func(request, call_next)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/app/middleware/logging.py", line 13, in dispatch
+    |     response = await call_next(request)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py", line 152, in call_next
+    |     raise app_exc
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py", line 139, in coro
+    |     await self.app(scope, receive_or_disconnect, send_no_error)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 59, in __call__
+    |     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/_exception_handler.py", line 54, in wrapped_app
+    |     raise exc
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/_exception_handler.py", line 43, in wrapped_app
+    |     await app(scope, receive, sender)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/routing.py", line 714, in __call__
+    |     await self.middleware_stack(scope, receive, send)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/routing.py", line 734, in app
+    |     await route.handle(scope, receive, send)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/routing.py", line 288, in handle
+    |     await self.app(scope, receive, send)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/routing.py", line 76, in app
+    |     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/_exception_handler.py", line 54, in wrapped_app
+    |     raise exc
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/_exception_handler.py", line 43, in wrapped_app
+    |     await app(scope, receive, sender)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/routing.py", line 73, in app
+    |     response = await f(request)
+    |                ^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/fastapi/routing.py", line 258, in app
+    |     solved_result = await solve_dependencies(
+    |                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     ...<6 lines>...
+    |     )
+    |     ^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/fastapi/dependencies/utils.py", line 608, in solve_dependencies
+    |     solved = await run_in_threadpool(call, **solved_result.values)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/concurrency.py", line 37, in run_in_threadpool
+    |     return await anyio.to_thread.run_sync(func)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/anyio/to_thread.py", line 56, in run_sync
+    |     return await get_async_backend().run_sync_in_worker_thread(
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |         func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     )
+    |     ^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2427, in run_sync_in_worker_thread
+    |     return await future
+    |            ^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 924, in run
+    |     result = context.run(func, *args)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/app/core/security/jwt_auth.py", line 56, in get_current_user
+    |     user = session.exec(select(User).where(User.username == username)).first()
+    |            ^^^^^^^^^^^^
+    | AttributeError: 'AsyncSession' object has no attribute 'exec'
+    +------------------------------------
+
+During handling of the above exception, another exception occurred:
+
+    @pytest.mark.asyncio
+    async def test_get_submissoes_autenticado():
+        token = create_access_token(data={"sub": "1"})
+    
+        transport = ASGITransport(app=app)
+        async with AsyncClient(transport=transport, base_url="http://test") as ac:
+>           response = await ac.get(
+                "/api/v1/submissoes/",
+                headers={"Authorization": f"Bearer {token}"}
+            )
+
+tests/test_submissoes.py:14: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.projetoapi/lib/python3.13/site-packages/httpx/_client.py:1747: in get
+    return await self.request(
+.projetoapi/lib/python3.13/site-packages/httpx/_client.py:1519: in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+.projetoapi/lib/python3.13/site-packages/httpx/_client.py:1608: in send
+    response = await self._send_handling_auth(
+.projetoapi/lib/python3.13/site-packages/httpx/_client.py:1636: in _send_handling_auth
+    response = await self._send_handling_redirects(
+.projetoapi/lib/python3.13/site-packages/httpx/_client.py:1673: in _send_handling_redirects
+    response = await self._send_single_request(request)
+.projetoapi/lib/python3.13/site-packages/httpx/_client.py:1709: in _send_single_request
+    response = await transport.handle_async_request(request)
+.projetoapi/lib/python3.13/site-packages/httpx/_transports/asgi.py:170: in handle_async_request
+    await self.app(scope, receive, send)
+.projetoapi/lib/python3.13/site-packages/fastapi/applications.py:1039: in __call__
+    await super().__call__(scope, receive, send)
+.projetoapi/lib/python3.13/site-packages/starlette/applications.py:113: in __call__
+    await self.middleware_stack(scope, receive, send)
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/errors.py:187: in __call__
+    raise exc
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/errors.py:165: in __call__
+    await self.app(scope, receive, _send)
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py:172: in __call__
+    with recv_stream, send_stream, collapse_excgroups():
+/usr/lib/python3.13/contextlib.py:162: in __exit__
+    self.gen.throw(value)
+.projetoapi/lib/python3.13/site-packages/starlette/_utils.py:83: in collapse_excgroups
+    raise exc
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py:174: in __call__
+    response = await self.dispatch_func(request, call_next)
+.projetoapi/lib/python3.13/site-packages/slowapi/middleware.py:133: in dispatch
+    response = await call_next(request)
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py:152: in call_next
+    raise app_exc
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py:139: in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py:172: in __call__
+    with recv_stream, send_stream, collapse_excgroups():
+/usr/lib/python3.13/contextlib.py:162: in __exit__
+    self.gen.throw(value)
+.projetoapi/lib/python3.13/site-packages/starlette/_utils.py:83: in collapse_excgroups
+    raise exc
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py:174: in __call__
+    response = await self.dispatch_func(request, call_next)
+app/middleware/logging.py:13: in dispatch
+    response = await call_next(request)
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py:152: in call_next
+    raise app_exc
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py:139: in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/exceptions.py:59: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+.projetoapi/lib/python3.13/site-packages/starlette/_exception_handler.py:54: in wrapped_app
+    raise exc
+.projetoapi/lib/python3.13/site-packages/starlette/_exception_handler.py:43: in wrapped_app
+    await app(scope, receive, sender)
+.projetoapi/lib/python3.13/site-packages/starlette/routing.py:714: in __call__
+    await self.middleware_stack(scope, receive, send)
+.projetoapi/lib/python3.13/site-packages/starlette/routing.py:734: in app
+    await route.handle(scope, receive, send)
+.projetoapi/lib/python3.13/site-packages/starlette/routing.py:288: in handle
+    await self.app(scope, receive, send)
+.projetoapi/lib/python3.13/site-packages/starlette/routing.py:76: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+.projetoapi/lib/python3.13/site-packages/starlette/_exception_handler.py:54: in wrapped_app
+    raise exc
+.projetoapi/lib/python3.13/site-packages/starlette/_exception_handler.py:43: in wrapped_app
+    await app(scope, receive, sender)
+.projetoapi/lib/python3.13/site-packages/starlette/routing.py:73: in app
+    response = await f(request)
+.projetoapi/lib/python3.13/site-packages/fastapi/routing.py:258: in app
+    solved_result = await solve_dependencies(
+.projetoapi/lib/python3.13/site-packages/fastapi/dependencies/utils.py:608: in solve_dependencies
+    solved = await run_in_threadpool(call, **solved_result.values)
+.projetoapi/lib/python3.13/site-packages/starlette/concurrency.py:37: in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+.projetoapi/lib/python3.13/site-packages/anyio/to_thread.py:56: in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+.projetoapi/lib/python3.13/site-packages/anyio/_backends/_asyncio.py:2427: in run_sync_in_worker_thread
+    return await future
+.projetoapi/lib/python3.13/site-packages/anyio/_backends/_asyncio.py:924: in run
+    result = context.run(func, *args)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzQ0MDMzMzMwfQ.e_7i9bA0UcbdDUpprgQbB4nam-dSQ8TkAZTA0LVOWAI'
+session = <sqlalchemy.orm.session.AsyncSession object at 0x7f79e88220d0>
+
+    def get_current_user(token: str = Depends(oauth2_scheme),
+                         session: Session = Depends(get_session)) -> User:
+        credentials_exception = HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token inválido ou expirado",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+            logger.info(f"Token decodificado com sucesso: {payload}")
+            username: str = payload.get("sub")
+            if username is None:
+                raise credentials_exception
+        except JWTError as e:
+            logger.error(f"Erro ao decodificar token: {e}")
+            raise credentials_exception
+        except KeyError:
+            raise credentials_exception
+    
+>       user = session.exec(select(User).where(User.username == username)).first()
+E       AttributeError: 'AsyncSession' object has no attribute 'exec'
+
+app/core/security/jwt_auth.py:56: AttributeError
+----------------------------- Captured stderr call -----------------------------
+2025-04-07 09:42:10,821 - app.core.security.jwt_auth - INFO - Token decodificado com sucesso: {'sub': '1', 'exp': 1744033330}
+------------------------------ Captured log call -------------------------------
+INFO     app.core.security.jwt_auth:jwt_auth.py:46 Token decodificado com sucesso: {'sub': '1', 'exp': 1744033330}
+______________________________ test_get_treasury _______________________________
+
+    @pytest.mark.asyncio
+    @respx.mock
+    async def test_get_treasury():
+        mock_response = {
+            "observations": [
+                {"date": "2024-03-27", "value": "4.75"}
+            ]
+        }
+    
+        respx.get("https://api.stlouisfed.org/fred/series/observations").mock(
+            return_value=httpx.Response(200, json=mock_response)
+        )
+    
+        transport = ASGITransport(app=app)
+        async with AsyncClient(transport=transport, base_url="http://test") as ac:
+            response = await ac.get("/api/v1/treasury")
+    
+>       assert response.status_code == 200
+E       assert 500 == 200
+E        +  where 500 = <Response [500 Internal Server Error]>.status_code
+
+tests/test_treasury.py:26: AssertionError
+----------------------------- Captured stdout call -----------------------------
+GET /api/v1/treasury - Status: 500 - Tempo: 0.74ms - User-Agent: python-httpx/0.28.1
+----------------------------- Captured stderr call -----------------------------
+2025-04-07 09:42:11,528 - httpx - INFO - HTTP Request: GET http://test/api/v1/treasury "HTTP/1.1 500 Internal Server Error"
+------------------------------ Captured log call -------------------------------
+INFO     httpx:_client.py:1719 HTTP Request: GET http://test/api/v1/treasury "HTTP/1.1 500 Internal Server Error"
+_________________________ test_upload_dataset_success __________________________
+  + Exception Group Traceback (most recent call last):
+  |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/_utils.py", line 77, in collapse_excgroups
+  |     yield
+  |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py", line 173, in __call__
+  |     async with anyio.create_task_group() as task_group:
+  |                ~~~~~~~~~~~~~~~~~~~~~~~^^
+  |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 729, in __aexit__
+  |     raise BaseExceptionGroup(
+  |         "unhandled errors in a TaskGroup", self._exceptions
+  |     ) from None
+  | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/runner.py", line 325, in from_call
+    |     result: TResult | None = func()
+    |                              ~~~~^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/runner.py", line 226, in <lambda>
+    |     lambda: runtest_hook(item=item, **kwds), when=when, reraise=reraise
+    |             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_hooks.py", line 499, in __call__
+    |     return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+    |            ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_manager.py", line 106, in _hookexec
+    |     return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+    |            ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_callers.py", line 174, in _multicall
+    |     return outcome.get_result()
+    |            ~~~~~~~~~~~~~~~~~~^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_result.py", line 93, in get_result
+    |     raise exc.with_traceback(exc.__traceback__)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_callers.py", line 159, in _multicall
+    |     teardown.throw(outcome._exception)
+    |     ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/threadexception.py", line 88, in pytest_runtest_call
+    |     yield from thread_exception_runtest_hook()
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/threadexception.py", line 64, in thread_exception_runtest_hook
+    |     yield
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_callers.py", line 159, in _multicall
+    |     teardown.throw(outcome._exception)
+    |     ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/unraisableexception.py", line 91, in pytest_runtest_call
+    |     yield from unraisable_exception_runtest_hook()
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/unraisableexception.py", line 66, in unraisable_exception_runtest_hook
+    |     yield
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_callers.py", line 159, in _multicall
+    |     teardown.throw(outcome._exception)
+    |     ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/logging.py", line 830, in pytest_runtest_call
+    |     yield from self._runtest_for(item, "call")
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/logging.py", line 813, in _runtest_for
+    |     yield
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_callers.py", line 159, in _multicall
+    |     teardown.throw(outcome._exception)
+    |     ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/capture.py", line 882, in pytest_runtest_call
+    |     return (yield)
+    |             ^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_callers.py", line 159, in _multicall
+    |     teardown.throw(outcome._exception)
+    |     ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/skipping.py", line 252, in pytest_runtest_call
+    |     return (yield)
+    |             ^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_callers.py", line 95, in _multicall
+    |     res = hook_impl.function(*args)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/runner.py", line 158, in pytest_runtest_call
+    |     item.runtest()
+    |     ~~~~~~~~~~~~^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pytest_asyncio/plugin.py", line 520, in runtest
+    |     super().runtest()
+    |     ~~~~~~~~~~~~~~~^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/python.py", line 1595, in runtest
+    |     self.ihook.pytest_pyfunc_call(pyfuncitem=self)
+    |     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_hooks.py", line 499, in __call__
+    |     return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+    |            ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_manager.py", line 106, in _hookexec
+    |     return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+    |            ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_callers.py", line 174, in _multicall
+    |     return outcome.get_result()
+    |            ~~~~~~~~~~~~~~~~~~^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_result.py", line 93, in get_result
+    |     raise exc.with_traceback(exc.__traceback__)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pluggy/_callers.py", line 95, in _multicall
+    |     res = hook_impl.function(*args)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/python.py", line 127, in pytest_pyfunc_call
+    |     result = testfunction(**testargs)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pytest_asyncio/plugin.py", line 1040, in inner
+    |     _loop.run_until_complete(task)
+    |     ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+    |   File "/usr/lib/python3.13/asyncio/base_events.py", line 719, in run_until_complete
+    |     return future.result()
+    |            ~~~~~~~~~~~~~^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/tests/test_upload.py", line 25, in test_upload_dataset_success
+    |     response = await ac.post(
+    |                ^^^^^^^^^^^^^^
+    |     ...<4 lines>...
+    |     )
+    |     ^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/httpx/_client.py", line 1838, in post
+    |     return await self.request(
+    |            ^^^^^^^^^^^^^^^^^^^
+    |     ...<13 lines>...
+    |     )
+    |     ^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/httpx/_client.py", line 1519, in request
+    |     return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/httpx/_client.py", line 1608, in send
+    |     response = await self._send_handling_auth(
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     ...<4 lines>...
+    |     )
+    |     ^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/httpx/_client.py", line 1636, in _send_handling_auth
+    |     response = await self._send_handling_redirects(
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     ...<3 lines>...
+    |     )
+    |     ^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/httpx/_client.py", line 1673, in _send_handling_redirects
+    |     response = await self._send_single_request(request)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/httpx/_client.py", line 1709, in _send_single_request
+    |     response = await transport.handle_async_request(request)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/httpx/_transports/asgi.py", line 170, in handle_async_request
+    |     await self.app(scope, receive, send)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/fastapi/applications.py", line 1039, in __call__
+    |     await super().__call__(scope, receive, send)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/applications.py", line 113, in __call__
+    |     await self.middleware_stack(scope, receive, send)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/errors.py", line 187, in __call__
+    |     raise exc
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/errors.py", line 165, in __call__
+    |     await self.app(scope, receive, _send)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py", line 172, in __call__
+    |     with recv_stream, send_stream, collapse_excgroups():
+    |                                    ~~~~~~~~~~~~~~~~~~^^
+    |   File "/usr/lib/python3.13/contextlib.py", line 162, in __exit__
+    |     self.gen.throw(value)
+    |     ~~~~~~~~~~~~~~^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/_utils.py", line 83, in collapse_excgroups
+    |     raise exc
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py", line 174, in __call__
+    |     response = await self.dispatch_func(request, call_next)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/slowapi/middleware.py", line 133, in dispatch
+    |     response = await call_next(request)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py", line 152, in call_next
+    |     raise app_exc
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py", line 139, in coro
+    |     await self.app(scope, receive_or_disconnect, send_no_error)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py", line 172, in __call__
+    |     with recv_stream, send_stream, collapse_excgroups():
+    |                                    ~~~~~~~~~~~~~~~~~~^^
+    |   File "/usr/lib/python3.13/contextlib.py", line 162, in __exit__
+    |     self.gen.throw(value)
+    |     ~~~~~~~~~~~~~~^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/_utils.py", line 83, in collapse_excgroups
+    |     raise exc
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py", line 174, in __call__
+    |     response = await self.dispatch_func(request, call_next)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/app/middleware/logging.py", line 13, in dispatch
+    |     response = await call_next(request)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py", line 152, in call_next
+    |     raise app_exc
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py", line 139, in coro
+    |     await self.app(scope, receive_or_disconnect, send_no_error)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 59, in __call__
+    |     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/_exception_handler.py", line 54, in wrapped_app
+    |     raise exc
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/_exception_handler.py", line 43, in wrapped_app
+    |     await app(scope, receive, sender)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/routing.py", line 714, in __call__
+    |     await self.middleware_stack(scope, receive, send)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/routing.py", line 734, in app
+    |     await route.handle(scope, receive, send)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/routing.py", line 288, in handle
+    |     await self.app(scope, receive, send)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/routing.py", line 76, in app
+    |     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/_exception_handler.py", line 54, in wrapped_app
+    |     raise exc
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/_exception_handler.py", line 43, in wrapped_app
+    |     await app(scope, receive, sender)
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/starlette/routing.py", line 73, in app
+    |     response = await f(request)
+    |                ^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/fastapi/routing.py", line 268, in app
+    |     raw_response = await run_endpoint_function(
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     ...<3 lines>...
+    |     )
+    |     ^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/fastapi/routing.py", line 179, in run_endpoint_function
+    |     return await dependant.call(**values)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/maximiliancfcnpi/Programação/Projeto_API/app/routes/v1/upload.py", line 31, in upload_dataset
+    |     with open(file_path, "wb") as f:
+    |          ~~~~^^^^^^^^^^^^^^^^^
+    | PermissionError: [Errno 13] Permission denied: 'uploads/tester_2025-04-07T12:42:11.550372_teste.csv'
+    +------------------------------------
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = PosixPath('/tmp/pytest-of-maximiliancfcnpi/pytest-1/test_upload_dataset_success0')
+
+    @pytest.mark.asyncio
+    async def test_upload_dataset_success(tmp_path):
+        app.dependency_overrides[get_current_user] = mock_current_user
+        token = create_access_token(data={"sub": "1"})
+    
+        test_file = tmp_path / "teste.csv"
+        test_file.write_text("coluna1,coluna2\nvalor1,valor2")
+    
+        transport = ASGITransport(app=app)
+        async with AsyncClient(transport=transport, base_url="http://test") as ac:
+            with open(test_file, "rb") as f:
+>               response = await ac.post(
+                    "/api/v1/upload/",
+                    headers={"Authorization": f"Bearer {token}"},
+                    files={"file": ("teste.csv", f, "text/csv")},
+                    data={"nome": "Dataset Teste", "descricao": "Descrição genérica"}
+                )
+
+tests/test_upload.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.projetoapi/lib/python3.13/site-packages/httpx/_client.py:1838: in post
+    return await self.request(
+.projetoapi/lib/python3.13/site-packages/httpx/_client.py:1519: in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+.projetoapi/lib/python3.13/site-packages/httpx/_client.py:1608: in send
+    response = await self._send_handling_auth(
+.projetoapi/lib/python3.13/site-packages/httpx/_client.py:1636: in _send_handling_auth
+    response = await self._send_handling_redirects(
+.projetoapi/lib/python3.13/site-packages/httpx/_client.py:1673: in _send_handling_redirects
+    response = await self._send_single_request(request)
+.projetoapi/lib/python3.13/site-packages/httpx/_client.py:1709: in _send_single_request
+    response = await transport.handle_async_request(request)
+.projetoapi/lib/python3.13/site-packages/httpx/_transports/asgi.py:170: in handle_async_request
+    await self.app(scope, receive, send)
+.projetoapi/lib/python3.13/site-packages/fastapi/applications.py:1039: in __call__
+    await super().__call__(scope, receive, send)
+.projetoapi/lib/python3.13/site-packages/starlette/applications.py:113: in __call__
+    await self.middleware_stack(scope, receive, send)
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/errors.py:187: in __call__
+    raise exc
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/errors.py:165: in __call__
+    await self.app(scope, receive, _send)
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py:172: in __call__
+    with recv_stream, send_stream, collapse_excgroups():
+/usr/lib/python3.13/contextlib.py:162: in __exit__
+    self.gen.throw(value)
+.projetoapi/lib/python3.13/site-packages/starlette/_utils.py:83: in collapse_excgroups
+    raise exc
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py:174: in __call__
+    response = await self.dispatch_func(request, call_next)
+.projetoapi/lib/python3.13/site-packages/slowapi/middleware.py:133: in dispatch
+    response = await call_next(request)
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py:152: in call_next
+    raise app_exc
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py:139: in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py:172: in __call__
+    with recv_stream, send_stream, collapse_excgroups():
+/usr/lib/python3.13/contextlib.py:162: in __exit__
+    self.gen.throw(value)
+.projetoapi/lib/python3.13/site-packages/starlette/_utils.py:83: in collapse_excgroups
+    raise exc
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py:174: in __call__
+    response = await self.dispatch_func(request, call_next)
+app/middleware/logging.py:13: in dispatch
+    response = await call_next(request)
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py:152: in call_next
+    raise app_exc
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/base.py:139: in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+.projetoapi/lib/python3.13/site-packages/starlette/middleware/exceptions.py:59: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+.projetoapi/lib/python3.13/site-packages/starlette/_exception_handler.py:54: in wrapped_app
+    raise exc
+.projetoapi/lib/python3.13/site-packages/starlette/_exception_handler.py:43: in wrapped_app
+    await app(scope, receive, sender)
+.projetoapi/lib/python3.13/site-packages/starlette/routing.py:714: in __call__
+    await self.middleware_stack(scope, receive, send)
+.projetoapi/lib/python3.13/site-packages/starlette/routing.py:734: in app
+    await route.handle(scope, receive, send)
+.projetoapi/lib/python3.13/site-packages/starlette/routing.py:288: in handle
+    await self.app(scope, receive, send)
+.projetoapi/lib/python3.13/site-packages/starlette/routing.py:76: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+.projetoapi/lib/python3.13/site-packages/starlette/_exception_handler.py:54: in wrapped_app
+    raise exc
+.projetoapi/lib/python3.13/site-packages/starlette/_exception_handler.py:43: in wrapped_app
+    await app(scope, receive, sender)
+.projetoapi/lib/python3.13/site-packages/starlette/routing.py:73: in app
+    response = await f(request)
+.projetoapi/lib/python3.13/site-packages/fastapi/routing.py:268: in app
+    raw_response = await run_endpoint_function(
+.projetoapi/lib/python3.13/site-packages/fastapi/routing.py:179: in run_endpoint_function
+    return await dependant.call(**values)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+file = UploadFile(filename='teste.csv', size=29, headers=Headers({'content-disposition': 'form-data; name="file"; filename="teste.csv"', 'content-type': 'text/csv'}))
+nome = 'Dataset Teste', descricao = 'Descrição genérica'
+user = User(id=1, username='tester', email='tester@example.com', score=0, level='iniciante', created_at=datetime.datetime(2025, 4, 7, 12, 42, 11, 549874))
+
+    @router.post("/", summary="Upload de dataset CSV")
+    async def upload_dataset(
+        file: UploadFile = File(...),
+        nome: str = Form(...),
+        descricao: str = Form(...),
+        user: User = Depends(get_current_user),
+    ):
+        if not file.filename.endswith(".csv"):
+            raise HTTPException(
+                status_code=400, detail="Apenas arquivos .csv são permitidos."
+            )
+    
+        filename = f"{user.username}_{datetime.utcnow().isoformat()}_{file.filename}"
+        file_path = os.path.join(UPLOAD_FOLDER, filename)
+    
+>       with open(file_path, "wb") as f:
+E       PermissionError: [Errno 13] Permission denied: 'uploads/tester_2025-04-07T12:42:11.550372_teste.csv'
+
+app/routes/v1/upload.py:31: PermissionError
+________________________ test_upload_extensao_invalida _________________________
+
+tmp_path = PosixPath('/tmp/pytest-of-maximiliancfcnpi/pytest-1/test_upload_extensao_invalida1')
+
+    @pytest.mark.asyncio
+    async def test_upload_extensao_invalida(tmp_path):
+        app.dependency_overrides[get_current_user] = mock_current_user
+        token = create_access_token(data={"sub": "1"})
+    
+        test_file = tmp_path / "invalido.txt"
+        test_file.write_text("isso não é csv")
+    
+        transport = ASGITransport(app=app)
+        async with AsyncClient(transport=transport, base_url="http://test") as ac:
+            with open(test_file, "rb") as f:
+                response = await ac.post(
+                    "/api/v1/upload/",
+                    headers={"Authorization": f"Bearer {token}"},
+                    files={"file": ("invalido.txt", f, "text/plain")},
+                    data={"nome": "Arquivo inválido", "descricao": "Formato errado"}
+                )
+    
+        assert response.status_code == 400
+>       assert response.json()["detail"] == "Formato de arquivo inválido."
+E       AssertionError: assert 'Apenas arquivos .csv são permitidos.' == 'Formato de arquivo inválido.'
+E         
+E         - Formato de arquivo inválido.
+E         + Apenas arquivos .csv são permitidos.
+
+tests/test_upload.py:76: AssertionError
+----------------------------- Captured stdout call -----------------------------
+POST /api/v1/upload/ - Status: 400 - Tempo: 14.03ms - User-Agent: python-httpx/0.28.1
+----------------------------- Captured stderr call -----------------------------
+2025-04-07 09:42:12,083 - httpx - INFO - HTTP Request: POST http://test/api/v1/upload/ "HTTP/1.1 400 Bad Request"
+------------------------------ Captured log call -------------------------------
+INFO     httpx:_client.py:1719 HTTP Request: POST http://test/api/v1/upload/ "HTTP/1.1 400 Bad Request"
+______________________________ test_login_and_me _______________________________
+
+    def test_login_and_me():
+>       seed_user()
+
+tests/test_users.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def seed_user():
+>       session = next(get_session())
+E       TypeError: 'async_generator' object is not an iterator
+
+tests/test_users.py:14: TypeError
+=============================== warnings summary ===============================
+app/main.py:36
+  /home/maximiliancfcnpi/Programação/Projeto_API/app/main.py:36: DeprecationWarning: 
+          on_event is deprecated, use lifespan event handlers instead.
+  
+          Read more about it in the
+          [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+          
+    @app.on_event("startup")
+
+.projetoapi/lib/python3.13/site-packages/fastapi/applications.py:4480
+  /home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/fastapi/applications.py:4480: DeprecationWarning: 
+          on_event is deprecated, use lifespan event handlers instead.
+  
+          Read more about it in the
+          [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+          
+    return self.router.on_event(event_type)
+
+.projetoapi/lib/python3.13/site-packages/_pytest/config/__init__.py:1417
+  /home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/config/__init__.py:1417: PytestConfigWarning: Unknown config option: anyio_backend
+  
+    self._warn_or_fail_if_strict(f"Unknown config option: {key}\n")
+
+.projetoapi/lib/python3.13/site-packages/_pytest/config/__init__.py:1417
+  /home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/_pytest/config/__init__.py:1417: PytestConfigWarning: Unknown config option: anyio_backend_scope
+  
+    self._warn_or_fail_if_strict(f"Unknown config option: {key}\n")
+
+tests/test_desafios.py::test_get_desafios_autenticado
+tests/test_leaderboard.py::test_leaderboard_authenticated
+tests/test_submissoes.py::test_get_submissoes_autenticado
+tests/test_upload.py::test_upload_dataset_success
+tests/test_upload.py::test_upload_extensao_invalida
+tests/test_upload.py::test_upload_sem_arquivo
+  /home/maximiliancfcnpi/Programação/Projeto_API/app/core/security/jwt_auth.py:30: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    expire = datetime.utcnow() + (
+
+tests/test_leaderboard.py::test_leaderboard_authenticated
+tests/test_upload.py::test_upload_dataset_success
+tests/test_upload.py::test_upload_extensao_invalida
+tests/test_upload.py::test_upload_sem_arquivo
+  /home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/pydantic/fields.py:647: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    return fac()
+
+tests/test_submissoes.py::test_get_submissoes_autenticado
+  /home/maximiliancfcnpi/Programação/Projeto_API/.projetoapi/lib/python3.13/site-packages/jose/jwt.py:312: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = timegm(datetime.utcnow().utctimetuple())
+
+tests/test_upload.py::test_upload_dataset_success
+  /home/maximiliancfcnpi/Programação/Projeto_API/app/routes/v1/upload.py:28: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    filename = f"{user.username}_{datetime.utcnow().isoformat()}_{file.filename}"
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+
+---------- coverage: platform linux, python 3.13.2-final-0 -----------
+Name                                            Stmts   Miss  Cover
+-------------------------------------------------------------------
+app/__init__.py                                     0      0   100%
+app/core/__init__.py                                0      0   100%
+app/core/database.py                               14      0   100%
+app/core/init_db.py                                25     25     0%
+app/core/limiter.py                                 3      0   100%
+app/core/security/__init__.py                       0      0   100%
+app/core/security/jwt_auth.py                      39      9    77%
+app/core/settings.py                                7      0   100%
+app/main.py                                        33      4    88%
+app/middleware/logging.py                          15      0   100%
+app/middleware/rate_limit.py                        3      0   100%
+app/models/__init__.py                             11      0   100%
+app/models/cdi.py                                   5      0   100%
+app/models/challenge.py                             9      0   100%
+app/models/economic_indicator.py                    9      9     0%
+app/models/ibov.py                                  5      0   100%
+app/models/indicator_metadata.py                    7      7     0%
+app/models/ipca.py                                  5      0   100%
+app/models/leaderboard.py                           6      0   100%
+app/models/selic.py                                 7      0   100%
+app/models/source_info.py                           5      0   100%
+app/models/sp500.py                                 5      0   100%
+app/models/submission.py                            9      0   100%
+app/models/treasury.py                              5      0   100%
+app/models/usd_brl.py                               7      0   100%
+app/models/user.py                                 27      0   100%
+app/routes/__init__.py                             13      0   100%
+app/routes/cambio.py                               16     16     0%
+app/routes/challenges.py                           23     23     0%
+app/routes/selic_csv.py                            43     43     0%
+app/routes/submissions.py                          23     23     0%
+app/routes/v1/__init__.py                           1      0   100%
+app/routes/v1/cdi.py                               18      8    56%
+app/routes/v1/desafios.py                          20      6    70%
+app/routes/v1/ibov.py                              29      7    76%
+app/routes/v1/infomoney.py                         34     12    65%
+app/routes/v1/ipca.py                               7      1    86%
+app/routes/v1/leaderboard.py                       10      0   100%
+app/routes/v1/me.py                                 7      1    86%
+app/routes/v1/protected.py                          9      1    89%
+app/routes/v1/registry.py                          20      0   100%
+app/routes/v1/selic.py                             25     13    48%
+app/routes/v1/sp500.py                             30     19    37%
+app/routes/v1/status.py                             8      0   100%
+app/routes/v1/submissoes.py                        12      4    67%
+app/routes/v1/token.py                             14      5    64%
+app/routes/v1/treasury.py                          31     17    45%
+app/routes/v1/upload.py                            17      2    88%
+app/routes/v1/usd_brl.py                            8      1    88%
+app/routes/v1/users.py                             47     33    30%
+app/schemas/__init__.py                             0      0   100%
+app/schemas/challenge.py                           13      0   100%
+app/schemas/submission.py                          12     12     0%
+app/security/openapi_schema.py                      9      6    33%
+app/services/webscraping/infomoney_service.py      18      6    67%
+-------------------------------------------------------------------
+TOTAL                                             778    313    60%
+
+=========================== short test summary info ============================
+FAILED tests/test_cdi.py::test_cdi - TypeError: AsyncClient.__init__() got an unexpected keyword argument 'app'
+FAILED tests/test_desafios.py::test_get_desafios_autenticado - AttributeError: 'AsyncSession' object has no attribute 'exec'
+FAILED tests/test_desafios.py::test_get_desafios_nao_autenticado - AttributeError: 'AsyncSession' object has no attribute 'exec'
+FAILED tests/test_ibov.py::test_get_ibov_mock[asyncio] - assert 500 == 200
+ +  where 500 = <Response [500 Internal Server Error]>.status_code
+FAILED tests/test_ibov.py::test_get_ibov_mock[trio] - ModuleNotFoundError: No module named 'trio'
+FAILED tests/test_infomoney.py::test_infomoney_scraping - assert 500 == 200
+ +  where 500 = <Response [500 Internal Server Error]>.status_code
+FAILED tests/test_protected.py::test_protected_endpoint - TypeError: 'async_generator' object is not an iterator
+FAILED tests/test_sp500.py::test_upload_sem_token - TypeError: AsyncClient.__init__() got an unexpected keyword argument 'app'
+FAILED tests/test_sp500.py::test_upload_extensao_invalida - TypeError: create_access_token() got an unexpected keyword argument 'subject'
+FAILED tests/test_sp500.py::test_upload_sem_arquivo - TypeError: create_access_token() got an unexpected keyword argument 'subject'
+FAILED tests/test_status.py::test_status - KeyError: 'message'
+FAILED tests/test_submissoes.py::test_get_submissoes_autenticado - AttributeError: 'AsyncSession' object has no attribute 'exec'
+FAILED tests/test_treasury.py::test_get_treasury - assert 500 == 200
+ +  where 500 = <Response [500 Internal Server Error]>.status_code
+FAILED tests/test_upload.py::test_upload_dataset_success - PermissionError: [Errno 13] Permission denied: 'uploads/tester_2025-04-07T12:42:11.550372_teste.csv'
+FAILED tests/test_upload.py::test_upload_extensao_invalida - AssertionError: assert 'Apenas arquivos .csv são permitidos.' == 'Formato de arquivo inválido.'
+  
+  - Formato de arquivo inválido.
+  + Apenas arquivos .csv são permitidos.
+FAILED tests/test_users.py::test_login_and_me - TypeError: 'async_generator' object is not an iterator
+================== 16 failed, 7 passed, 16 warnings in 9.02s ===================

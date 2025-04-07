@@ -1,9 +1,13 @@
+import asyncio
+
 import pytest
 import respx
-from httpx import AsyncClient, ASGITransport, Response
+from httpx import ASGITransport, AsyncClient, Response
+
 from app.main import app
 
-@pytest.mark.asyncio
+
+@pytest.mark.anyio(backend="asyncio")
 @respx.mock
 async def test_get_ibov_mock():
     mock_response = {
@@ -26,8 +30,8 @@ async def test_get_ibov_mock():
 
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as ac:
-        response = await ac.get("/api/v1/ibovespa")
+        response = await ac.get("/api/v1/ibov")
 
     assert response.status_code == 200
     data = response.json()
-    assert data["close"] == 128560.24
+    assert data["chart"]["result"][0]["indicators"]["quote"][0]["close"][0] == 128560.24

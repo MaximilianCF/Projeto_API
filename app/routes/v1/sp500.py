@@ -1,14 +1,17 @@
+from datetime import datetime
+
+import httpx
+from cachetools import TTLCache
 from fastapi import APIRouter, HTTPException, Request
+
 from app.middleware.rate_limit import limiter  # ⬅️ importa o limiter
 from app.models.sp500 import SP500
-from datetime import datetime
-from cachetools import TTLCache
-import httpx
 
 router = APIRouter()
 
 # Cache com no máximo 1 item e TTL de 60 segundos
 sp500_cache = TTLCache(maxsize=1, ttl=60)
+
 
 @router.get("/sp500")
 @limiter.limit("10/minute")
@@ -29,15 +32,17 @@ async def get_sp500(request: Request):
             timestamp = data["chart"]["result"][0]["meta"]["regularMarketTime"]
             dt = datetime.fromtimestamp(timestamp)
 
-            result = {
-                "data": dt.strftime("%Y-%m-%d %H:%M:%S"),
-                "valor": value
-            }
+            result = {"data": dt.strftime("%Y-%m-%d %H:%M:%S"), "valor": value}
 
             sp500_cache["sp500"] = result
             return result
 
     except httpx.HTTPStatusError as e:
-        raise HTTPException(status_code=e.response.status_code, detail=f"Erro ao buscar S&P 500: {str(e)}")
+        raise HTTPException(
+            status_code=e.response.status_code,
+            detail=f"Erro ao buscar S&P500: {str(e)}")
+            
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Erro interno ao processar dados do S&P 500: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Erro ao buscar S&P500: {str(e)}")

@@ -1,9 +1,11 @@
 import pytest
-from httpx import AsyncClient, ASGITransport
+from httpx import ASGITransport, AsyncClient
+
 from app.main import app
 
+
 @pytest.mark.asyncio
-async def get_cambio_usd_brl():
+async def get_usd_brl():
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as ac:
         response = await ac.get("/api/v1/usdbrl")
