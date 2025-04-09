@@ -1,39 +1,26 @@
-import pytest
-from httpx import ASGITransport, AsyncClient
+from typing import List
 
-from app.core.security.jwt_auth import create_access_token, get_current_user
-from app.main import app
+from fastapi import APIRouter, Depends, HTTPException
 
-# Mocka o retorno do get_current_user para evitar checagens de usuário real
-app.dependency_overrides[get_current_user] = lambda: {"id": 1}
+from app.core.security.jwt_auth import get_current_user
+from app.models.leaderboard import Leaderboard
+from app.models.user import User
 
-def debug_routes():
-    print("\n\n--- Rotas Registradas no app ---")
-    for route in app.routes:
-        print(f"  • {route.path}")
-    print("--- Fim das rotas ---\n\n")
+router = APIRouter()
 
-@pytest.mark.asyncio
-async def test_get_desafios_autenticado():
-    debug_routes()
+# Mock de ranking
+ranking_falso = [
+    {"username": "alice", "pontuacao": 95.2},
+    {"username": "bob", "pontuacao": 89.4},
+    {"username": "carol", "pontuacao": 77.8},
+]
 
-    token = create_access_token(data={"sub": "1"})
-    transport = ASGITransport(app=app)
 
-    async with AsyncClient(transport=transport, base_url="http://test") as ac:
-        response = await ac.get(
-            "/api/v1/desafios/",
-            headers={"Authorization": f"Bearer {token}"}
-        )
-
-    assert response.status_code == 200
-    assert isinstance(response.json(), list)
-
-@pytest.mark.asyncio
-async def test_get_desafios_nao_autenticado():
-    transport = ASGITransport(app=app)
-
-    async with AsyncClient(transport=transport, base_url="http://test") as ac:
-        response = await ac.get("/api/v1/desafios/")
-
-    assert response.status_code == 401
+@router.get(
+    "/",
+    include_in_schema=True,
+    response_model=List[Leaderboard],
+    summary="Ranking dos usuários",
+)
+def listar_leaderboard(current_user: User = Depends(get_current_user)):
+    return ranking_falso

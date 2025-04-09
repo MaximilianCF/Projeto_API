@@ -8,11 +8,6 @@ from app.models.user import User
 
 router = APIRouter()
 
-UPLOAD_FOLDER = "uploads"
-
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-
-
 @router.post("/", summary="Upload de dataset CSV")
 async def upload_dataset(
     file: UploadFile = File(...),
@@ -20,13 +15,17 @@ async def upload_dataset(
     descricao: str = Form(...),
     user: User = Depends(get_current_user),
 ):
+    # 🧠 Captura o diretório só no momento do upload (após os.environ já ter sido setado no teste)
+    upload_dir = os.getenv("UPLOAD_FOLDER", "uploads")
+    os.makedirs(upload_dir, exist_ok=True)
+
     if not file.filename.endswith(".csv"):
         raise HTTPException(
             status_code=400, detail="Apenas arquivos .csv são permitidos."
         )
 
     filename = f"{user.username}_{datetime.utcnow().isoformat()}_{file.filename}"
-    file_path = os.path.join(UPLOAD_FOLDER, filename)
+    file_path = os.path.join(upload_dir, filename)
 
     with open(file_path, "wb") as f:
         f.write(await file.read())

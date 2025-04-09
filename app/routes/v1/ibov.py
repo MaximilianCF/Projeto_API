@@ -1,4 +1,5 @@
 from datetime import datetime
+from sqlalchemy.ext.asyncio import AsyncSession
 
 import httpx
 from cachetools import TTLCache
@@ -18,12 +19,13 @@ async def get_ibov(request: Request):
     if "ibov" in ibov_cache:
         return ibov_cache["ibov"]
 
-    url = "https://query1.finance.yahoo.com/v8/finance/chart/^BVSP?interval=1d&range=1d"
+    url = "https://query1.finance.yahoo.com/v8/finance/chart/^BVSP"
     headers = {"User-Agent": "Mozilla/5.0"}
-
+    params = {"interval": "1d", "range": "1d"}
+    print("🔍 CHAMANDO URL:", url)
     try:
         async with httpx.AsyncClient() as client:
-            response = await client.get(url, headers=headers)
+            response = await client.get(url, headers=headers, params=params)
             response.raise_for_status()
             data = response.json()
 

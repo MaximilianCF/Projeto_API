@@ -1,30 +1,33 @@
-import httpx  # <-- Essa linha estava faltando!
 import pytest
 import respx
-from httpx import ASGITransport, AsyncClient
-
+from httpx import ASGITransport, AsyncClient, Response
 from app.main import app
+from app.routes.v1.treasury import treasury_cache
 
 
 @pytest.mark.asyncio
-@respx.mock
-async def test_get_treasury():
-    mock_response = {
+async def test_get_treasury_mock():
+    treasury_cache.clear()
+
+    mock_data = {
         "observations": [
-            {"date": "2024-03-27", "value": "4.75"}
+            {
+                "date": "2025-04-05",
+                "value": "4.28"
+            }
         ]
     }
 
-    respx.get("https://api.stlouisfed.org/fred/series/observations").mock(
-        return_value=httpx.Response(200, json=mock_response)
-    )
+    with respx.mock(base_url="https://api.stlouisfed.org", assert_all_mocked=True) as respx_mock:
+        respx_mock.get("/fred/series/observations").mock(
+            return_value=Response(200, json=mock_data)
+        )
 
-    transport = ASGITransport(app=app)
-    async with AsyncClient(transport=transport, base_url="http://test") as ac:
-        response = await ac.get("/api/v1/treasury")
+        transport = ASGITransport(app=app)
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            response = await client.get("/api/v1/treasury")
 
-    assert response.status_code == 200
-    assert response.json() == {
-        "date": "2024-03-27",
-        "yield_pct": 4.75
-    }
+        assert response.status_code == 200, f"❌ status {response.status_code} - {response.text}"
+        data = response.json()
+        assert data["valor"] == 4.28
+        assert data["data"] == "2025-04-05"

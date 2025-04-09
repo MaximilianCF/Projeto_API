@@ -1,22 +1,32 @@
-from fastapi.testclient import TestClient
-
+import pytest
+import respx
+from httpx import Response, ASGITransport, AsyncClient
 from app.main import app
 
-client = TestClient(app)
+HTML_MOCK = """
+<html>
+<body>
+<div class="highlights__list">
+    <a href="/mercados/noticia-1">Notícia 1</a>
+    <a href="/mercados/noticia-2">Notícia 2</a>
+</div>
+</body>
+</html>
+"""
 
-def test_infomoney_scraping():
-    response = client.get("/api/v1/webscraping/infomoney")
+@pytest.mark.asyncio
+@respx.mock
+async def test_infomoney_scraping():
+    respx.get("https://www.infomoney.com.br/mercados/").mock(
+        return_value=Response(200, text=HTML_MOCK)
+    )
+
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as ac:
+        response = await ac.get("/api/v1/webscraping/infomoney")
+
     assert response.status_code == 200
     data = response.json()
+    assert data["fonte"] == "InfoMoney"
     assert isinstance(data["dados"], list)
-
-    json_data = response.json()
-    assert "fonte" in json_data
-    assert json_data["fonte"] == "InfoMoney"
-    assert "dados" in json_data
-    assert isinstance(json_data["dados"], list)
-
-    if json_data["dados"]:  # Se houver manchetes
-        item = json_data["dados"][0]
-        assert "titulo" in item
-        assert "url" in item
+    assert data["dados"][0]["titulo"] == "Notícia 1"

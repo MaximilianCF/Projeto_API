@@ -9,7 +9,7 @@ router = APIRouter()
 
 
 @router.get("/me")
-def get_me(current_user: User = Depends(get_current_user)):
+async def get_me(current_user: User = Depends(get_current_user)):
     return {
         "username": current_user.username,
         "email": current_user.email,

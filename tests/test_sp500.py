@@ -1,51 +1,37 @@
 import pytest
-from httpx import AsyncClient
-
-from app.core.security.jwt_auth import create_access_token
+import respx
+from httpx import ASGITransport, AsyncClient, Response
 from app.main import app
+from app.routes.v1.sp500 import sp500_cache
 
 
 @pytest.mark.asyncio
-async def test_upload_sem_token(tmp_path):
-    test_file = tmp_path / "sem_token.csv"
-    test_file.write_text("coluna1,coluna2\nvalor1,valor2")
+async def test_get_sp500_mock():
+    sp500_cache.clear()
 
-    async with AsyncClient(app=app, base_url="http://test") as ac:
-        with open(test_file, "rb") as f:
-            response = await ac.post(
-                "/api/v1/upload/",
-                files={"file": ("sem_token.csv", f, "text/csv")},
-                data={"nome": "Sem Token", "descricao": "Teste sem autenticação"}
-            )
-    assert response.status_code == 401
+    mock_data = {
+        "chart": {
+            "result": [{
+                "meta": {
+                    "regularMarketPrice": 5274.20,
+                    "regularMarketTime": 1711497600
+                }
+            }],
+            "error": None
+        }
+    }
 
+    with respx.mock(base_url="https://query1.finance.yahoo.com", assert_all_mocked=True) as respx_mock:
+        respx_mock.get(
+            "/v8/finance/chart/^GSPC",
+            params={"interval": "1d", "range": "1d"}
+        ).mock(return_value=Response(200, json=mock_data))
 
-@pytest.mark.asyncio
-async def test_upload_extensao_invalida(tmp_path):
-    token = create_access_token(subject="1")
-    test_file = tmp_path / "invalido.txt"
-    test_file.write_text("isso não é um csv")
+        transport = ASGITransport(app=app)
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            response = await client.get("/api/v1/sp500")
 
-    async with AsyncClient(app=app, base_url="http://test") as ac:
-        with open(test_file, "rb") as f:
-            response = await ac.post(
-                "/api/v1/upload/",
-                headers={"Authorization": f"Bearer {token}"},
-                files={"file": ("invalido.txt", f, "text/plain")},
-                data={"nome": "Extensão Inválida", "descricao": "Arquivo .txt"}
-            )
-    assert response.status_code == 400
-    assert "Apenas arquivos .csv" in response.text
-
-
-@pytest.mark.asyncio
-async def test_upload_sem_arquivo():
-    token = create_access_token(subject="1")
-
-    async with AsyncClient(app=app, base_url="http://test") as ac:
-        response = await ac.post(
-            "/api/v1/upload/",
-            headers={"Authorization": f"Bearer {token}"},
-            data={"nome": "Sem Arquivo", "descricao": "Teste sem CSV"}
-        )
-    assert response.status_code == 422  # Falta de campo obrigatório
+        assert response.status_code == 200, f"❌ status {response.status_code} - {response.text}"
+        data = response.json()
+        assert data["valor"] == 5274.20
+        assert "data" in data

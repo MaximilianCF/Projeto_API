@@ -2,6 +2,7 @@
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel import Session, select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_session
 from app.core.security.jwt_auth import pwd_context
@@ -14,11 +15,12 @@ router = APIRouter()
 @router.post("/users", response_model=UserRead)
 async def create_user(
         user_create: UserCreate,
-        session: Session = Depends(get_session)):
-    existing = session.exec(
+        session: AsyncSession = Depends(get_session)):
+    existing = await session.execute(
         select(User).where(User.username == user_create.username)
-    ).first()
-    if existing:
+    )
+    existing_user = existing.scalars().first()
+    if existing_user:
         raise HTTPException(status_code=400, detail="Usuário já existe")
 
     hashed_pw = pwd_context.hash(user_create.password)
@@ -35,8 +37,8 @@ async def create_user(
 
 # 📖 Ler usuário por ID
 @router.get("/users/{user_id}", response_model=UserRead)
-def read_user(user_id: int, session: Session = Depends(get_session)):
-    user = session.get(User, user_id)
+async def read_user(user_id: int, session: AsyncSession = Depends(get_session)):
+    user = await session.get(User, user_id)
     if not user:
         raise HTTPException(status_code=404, detail="Usuário não encontrado")
     return user
@@ -44,9 +46,9 @@ def read_user(user_id: int, session: Session = Depends(get_session)):
 
 # 🛠️ Atualizar usuário
 @router.put("/users/{user_id}", response_model=UserRead)
-def update_user(user_id: int, user_update: UserUpdate,
-                session: Session = Depends(get_session)):
-    user = session.get(User, user_id)
+async def update_user(user_id: int, user_update: UserUpdate,
+                       session: AsyncSession = Depends(get_session)):
+    user = await session.get(User, user_id)
     if not user:
         raise HTTPException(status_code=404, detail="Usuário não encontrado")
 
@@ -67,9 +69,9 @@ def update_user(user_id: int, user_update: UserUpdate,
 
 # ❌ Deletar usuário
 @router.delete("/users/{user_id}", status_code=204)
-def delete_user(user_id: int, session: Session = Depends(get_session)):
-    user = session.get(User, user_id)
+async def delete_user(user_id: int, session: AsyncSession = Depends(get_session)):
+    user = await session.get(User, user_id)
     if not user:
         raise HTTPException(status_code=404, detail="Usuário não encontrado")
-    session.delete(user)
-    session.commit()
+    await session.delete(user)
+    await session.commit()

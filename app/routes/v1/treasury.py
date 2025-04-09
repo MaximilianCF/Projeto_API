@@ -1,25 +1,26 @@
 import os
 from datetime import datetime
-
+from dotenv import load_dotenv
 import httpx
 from cachetools import TTLCache
 from fastapi import APIRouter, HTTPException, Request
 
 from app.middleware.rate_limit import limiter
 
+load_dotenv()
+
 router = APIRouter()
 treasury_cache = TTLCache(maxsize=1, ttl=60)
 
-FRED_API_KEY = os.getenv("FRED_API_KEY=b2e114fe817a6697a6f4f146a3436151")
-
+FRED_API_KEY = os.getenv("FRED_API_KEY")
+if not FRED_API_KEY:
+    raise ValueError("FRED_API_KEY não configurada no .env")
 
 @router.get("/treasury")
 @limiter.limit("10/minute")
 async def get_treasury(request: Request):
     if not FRED_API_KEY:
-        raise HTTPException(
-            status_code=500, detail="FRED_API_KEY não configurada no .env"
-        )
+        raise ValueError("FRED_API_KEY não configurada no .env")
 
     if "treasury" in treasury_cache:
         return treasury_cache["treasury"]

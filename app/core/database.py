@@ -2,8 +2,10 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 from app.core import settings
 
+DATABASE_URL="postgresql+asyncpg://pulso:pulso123@db:5432/pulsodb"
+
 # Engine assíncrono (PostgreSQL com asyncpg)
-engine = create_async_engine("postgresql+asyncpg://pulso:pulso123@localhost:5432/pulsodb", echo=False, future=True)
+engine = create_async_engine(settings.DATABASE_URL, echo=False, future=True)
 
 # Fábrica de sessões assíncronas
 AsyncSessionLocal = sessionmaker(
