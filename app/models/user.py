@@ -2,14 +2,12 @@
 
 from datetime import datetime
 from typing import Optional
-
-from pydantic import BaseModel
-from sqlmodel import Field, SQLModel
+from sqlmodel import SQLModel, Field
 
 
-# Modelo usado no banco de dados
+# Modelo principal que será mapeado para a tabela no banco
 class User(SQLModel, table=True):
-    id: int = Field(default=None, primary_key=True)
+    id: Optional[int] = Field(default=None, primary_key=True)
     username: str
     email: str
     hashed_password: str
@@ -18,24 +16,24 @@ class User(SQLModel, table=True):
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
 
-# Modelos auxiliares para criação, leitura e atualização
-
-
-class UserCreate(BaseModel):
+# Modelo para criação de usuários (entrada)
+class UserCreate(SQLModel):
     username: str
     email: Optional[str] = None
     password: str
 
 
-class UserRead(BaseModel):
-    id: int
+# Modelo para leitura de usuários (retorno da API)
+class UserRead(SQLModel):
+    id: Optional[int]  # Agora aceita None em casos iniciais
     username: str
     email: Optional[str]
     score: int
     level: str
 
 
-class UserUpdate(BaseModel):
+# Modelo para atualização de usuários (parcial)
+class UserUpdate(SQLModel):
     email: Optional[str] = None
     password: Optional[str] = None
     score: Optional[int] = None
