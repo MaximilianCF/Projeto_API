@@ -1,0 +1,24 @@
+# Framework de testes
+pytest
+pytest-asyncio
+
+# Cliente HTTP assíncrono para testes de API
+httpx
+
+# Mock de requisições HTTP externas
+respx
+
+# Suporte ao ciclo de vida do FastAPI para testes assíncronos
+asgi-lifespan
+
+# Suporte ao FastAPI + banco de dados
+sqlalchemy
+sqlmodel
+asyncpg
+
+# Linting e formatação (opcional, mas recomendado)
+black
+isort
+flake8
+mypy
+

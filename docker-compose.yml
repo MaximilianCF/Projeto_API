@@ -12,10 +12,12 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "5432:5432"  # Expõe a porta 5432 para a máquina local (opcional)
 
-  api:
-    build: .
+  pulso_api:
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: pulso_api
     ports:
       - "8000:8000"
@@ -23,6 +25,10 @@ services:
       - db
     volumes:
       - .:/app
+    env_file:
+      - .env
+    command: >
+      sh -c "./wait-for-db.sh && python -m app.core.init_db && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
 
 volumes:
   pgdata:

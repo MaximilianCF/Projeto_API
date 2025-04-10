@@ -1,21 +1,12 @@
-from typing import Optional
 from datetime import datetime
-from sqlmodel import SQLModel, Field
+from typing import Optional
 
-class ChallengeBase(SQLModel):
-    title: str
-    description: str
-    dataset_url: str
-    deadline: datetime
-    prize: Optional[float] = None
+from sqlmodel import Field, SQLModel
 
-class ChallengeCreate(ChallengeBase):
-    pass
 
-class ChallengeRead(ChallengeBase):
-    id: int
-    created_at: datetime
-
-class Challenge(ChallengeBase, table=True):
+class Challenge(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    titulo: str
+    descricao: str
+    deadline: Optional[datetime] = None
+    criado_em: datetime = Field(default_factory=datetime.utcnow)

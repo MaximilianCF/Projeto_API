@@ -1,14 +1,14 @@
-# tests/test_status.py
+import pytest
+from httpx import AsyncClient, ASGITransport
 
-from fastapi.testclient import TestClient
 from app.main import app
 
-client = TestClient(app)
 
-def test_status():
-    response = client.get("/api/v1/status")
+@pytest.mark.asyncio
+async def test_status_route():
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        response = await client.get("/api/v1/status")
+
     assert response.status_code == 200
-    data = response.json()
-    assert data["status"] == "ok"
-    assert "API" in data["message"]
-
+    assert response.json() == {"status": "ok"}

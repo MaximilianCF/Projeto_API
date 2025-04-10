@@ -1,13 +1,17 @@
 # app/scripts/seed_users.py
 
 from sqlmodel import Session, select
+
 from app.core.database import engine
-from app.models.user import User
 from app.core.security.jwt_auth import pwd_context
+from app.models.user import User
+
 
 def seed_demo_user():
     with Session(engine) as session:
-        user = session.exec(select(User).where(User.username == "usuario_demo")).first()
+        user = session.exec(
+            select(User).where(
+                User.username == "usuario_demo")).first()
         if not user:
             demo_user = User(
                 username="usuario_demo",
